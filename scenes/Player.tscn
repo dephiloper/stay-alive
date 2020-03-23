@@ -1,8 +1,132 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=37 format=2]
 
-[ext_resource path="res://icon.png" type="Texture" id=1]
+[ext_resource path="res://img/char_front/char_front4.png" type="Texture" id=1]
+[ext_resource path="res://scripts/Player.gd" type="Script" id=2]
+[ext_resource path="res://img/char_front/char_front5.png" type="Texture" id=3]
+[ext_resource path="res://img/char_front/char_front0.png" type="Texture" id=4]
+[ext_resource path="res://img/char_front/char_front1.png" type="Texture" id=5]
+[ext_resource path="res://img/char_front/char_front3.png" type="Texture" id=6]
+[ext_resource path="res://img/char_front/char_front2.png" type="Texture" id=7]
+[ext_resource path="res://img/char_side/side3.png" type="Texture" id=8]
+[ext_resource path="res://img/char_side/side2.png" type="Texture" id=9]
+[ext_resource path="res://img/char_back/char_back3.png" type="Texture" id=10]
+[ext_resource path="res://img/char_side/side1.png" type="Texture" id=11]
+[ext_resource path="res://img/char_side/side4.png" type="Texture" id=12]
+[ext_resource path="res://img/char_back/char_back1.png" type="Texture" id=13]
+[ext_resource path="res://img/char_side/side0.png" type="Texture" id=14]
+[ext_resource path="res://img/char_back/char_back2.png" type="Texture" id=15]
+[ext_resource path="res://img/char_back/char_back4.png" type="Texture" id=16]
+[ext_resource path="res://img/char_back/char_back5.png" type="Texture" id=17]
+[ext_resource path="res://img/char_back/char_back0.png" type="Texture" id=18]
+[ext_resource path="res://img/char_side/side5.png" type="Texture" id=19]
+[ext_resource path="res://img/char_idle_side/side_idle2.png" type="Texture" id=20]
+[ext_resource path="res://img/char_idle_front/down_idle1.png" type="Texture" id=21]
+[ext_resource path="res://img/char_idle_back/up_idle2.png" type="Texture" id=22]
+[ext_resource path="res://img/char_idle_back/up_idle3.png" type="Texture" id=23]
+[ext_resource path="res://img/char_idle_side/side_idle1.png" type="Texture" id=24]
+[ext_resource path="res://img/char_idle_side/side_idle3.png" type="Texture" id=25]
+[ext_resource path="res://img/char_idle_side/side_idle0.png" type="Texture" id=26]
+[ext_resource path="res://img/char_idle_back/up_idle1.png" type="Texture" id=27]
+[ext_resource path="res://img/char_idle_front/down_idle2.png" type="Texture" id=28]
+[ext_resource path="res://img/char_idle_back/up_idle0.png" type="Texture" id=29]
+[ext_resource path="res://img/char_idle_front/down_idle0.png" type="Texture" id=30]
+[ext_resource path="res://img/char_idle_front/down_idle3.png" type="Texture" id=31]
+[ext_resource path="res://scenes/HealthBar.tscn" type="PackedScene" id=32]
+[ext_resource path="res://scenes/StaminaBar.tscn" type="PackedScene" id=33]
+[ext_resource path="res://img/stamina_bar/border.png" type="Texture" id=34]
 
-[node name="Player" type="Sprite"]
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 18 ), ExtResource( 13 ), ExtResource( 15 ), ExtResource( 10 ), ExtResource( 16 ), ExtResource( 17 ) ],
+"loop": true,
+"name": "up",
+"speed": 9.0
+}, {
+"frames": [ ExtResource( 14 ), ExtResource( 11 ), ExtResource( 9 ), ExtResource( 8 ), ExtResource( 12 ), ExtResource( 19 ) ],
+"loop": true,
+"name": "side",
+"speed": 9.0
+}, {
+"frames": [ ExtResource( 4 ), ExtResource( 5 ), ExtResource( 7 ), ExtResource( 6 ), ExtResource( 1 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "down",
+"speed": 9.0
+}, {
+"frames": [ ExtResource( 26 ), ExtResource( 24 ), ExtResource( 20 ), ExtResource( 25 ) ],
+"loop": true,
+"name": "idle_side",
+"speed": 7.0
+}, {
+"frames": [ ExtResource( 30 ), ExtResource( 21 ), ExtResource( 28 ), ExtResource( 31 ) ],
+"loop": true,
+"name": "idle_down",
+"speed": 7.0
+}, {
+"frames": [ ExtResource( 29 ), ExtResource( 27 ), ExtResource( 22 ), ExtResource( 23 ) ],
+"loop": true,
+"name": "idle_up",
+"speed": 7.0
+} ]
 
-[node name="Sprite" type="Sprite" parent="."]
-texture = ExtResource( 1 )
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 19.6543
+height = 28.0905
+
+[node name="Player" type="KinematicBody2D"]
+collision_mask = 2
+script = ExtResource( 2 )
+
+[node name="Sprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 0.15, 0.15 )
+z_index = 1
+frames = SubResource( 1 )
+animation = "idle_up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 2 )
+
+[node name="AttackArea" type="ColorRect" parent="."]
+self_modulate = Color( 1, 1, 1, 0.392157 )
+margin_top = -20.0
+margin_right = 200.0
+margin_bottom = 20.0
+rect_pivot_offset = Vector2( 0, 20 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UI" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -64.0
+margin_top = -64.0
+margin_right = 64.0
+margin_bottom = -34.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HealthBar" parent="UI" instance=ExtResource( 32 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 8.0
+margin_top = 0.0
+margin_right = 120.0
+margin_bottom = 20.0
+rect_scale = Vector2( 0.5, 0.5 )
+value = 50.0
+
+[node name="StaminaBar" parent="UI" instance=ExtResource( 33 )]
+margin_left = 14.0
+margin_top = 14.0
+margin_right = -14.0
+margin_bottom = -10.0
+rect_scale = Vector2( 0.5, 0.5 )
+rect_pivot_offset = Vector2( 50, 8 )
+value = 33.0
+texture_over = ExtResource( 34 )
+
+[node name="StaminaTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+[connection signal="timeout" from="StaminaTimer" to="." method="_on_StaminaTimer_timeout"]
