@@ -219,6 +219,7 @@ tile_data = PoolIntArray( -327683, 0, 0, -327682, 0, 0, -327681, 0, 0, -393216, 
 
 [node name="SpawnTimer" type="Timer" parent="."]
 wait_time = 3.0
+autostart = true
 [connection signal="direction_change" from="CanvasLayer/MovementJoystick" to="Player" method="_on_MovementJoystick_direction_change"]
 [connection signal="direction_change" from="CanvasLayer/AttackJoystick" to="Player" method="_on_AttackJoystick_direction_change"]
 [connection signal="stick_released" from="CanvasLayer/AttackJoystick" to="Player" method="_on_AttackJoystick_stick_released"]
