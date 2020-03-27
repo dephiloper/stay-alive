@@ -10,6 +10,7 @@ onready var touch_button: TouchScreenButton = $TouchButton
 export(Color) var joystick_color: Color = Color.white
 export(Vector2) var default_location 
 export(ScreenSide) var screen_side 
+export(bool) var is_debug = false
 
 const RADIUS: Vector2 = Vector2(128, 128)
 const BOUNDS: int = 224
@@ -24,27 +25,34 @@ var _prev_dir: Vector2 = Vector2.ZERO
 func _ready() -> void:
 	touch_button.position -= RADIUS
 	_reset_joystick()
+	if is_debug: visible = false
 
 func _process(delta) -> void:
-	if _ongoing_drag == -1:
-		var diff_to_center = -RADIUS - touch_button.position
-		touch_button.modulate = Color(joystick_color.r, joystick_color.g, joystick_color.b, 0.2)
-		if diff_to_center.length() > 0.1:
-			touch_button.position += diff_to_center * JOYSTICK_RETURN_ACCEL * delta
-		else:
-			touch_button.position = -RADIUS
-	else:
-		touch_button.modulate = Color(joystick_color.r, joystick_color.g, joystick_color.b, 1.0)
+	var dir: Vector2 = Vector2.ZERO
 	
-	var dir = _get_value()
+	if is_debug:
+		dir = _emulate_touch()
+	else:
+		if _ongoing_drag == -1:
+			var diff_to_center = -RADIUS - touch_button.position
+			touch_button.modulate = Color(joystick_color.r, joystick_color.g, joystick_color.b, 0.2)
+			if diff_to_center.length() > 0.1:
+				touch_button.position += diff_to_center * JOYSTICK_RETURN_ACCEL * delta
+			else:
+				touch_button.position = -RADIUS
+		else:
+			touch_button.modulate = Color(joystick_color.r, joystick_color.g, joystick_color.b, 1.0)
+		dir = _get_value()
+
 	if dir != _prev_dir:
 		emit_signal("direction_change", dir)
 		_prev_dir = dir
-		
+	
 func _get_centered_pos() -> Vector2:
 	return touch_button.position + RADIUS
 
 func _input(event) -> void:
+	if is_debug: return
 	# first touch interaction
 	if event is InputEventScreenTouch and event.is_pressed() and _input_in_range(event.position):
 		position = _apply_margin(event.position)
@@ -90,3 +98,16 @@ func _apply_margin(pos: Vector2) -> Vector2:
 func _reset_joystick() -> void:
 		position.x = default_location.x * GameState.screen_width
 		position.y = default_location.y * GameState.screen_height
+		
+func _emulate_touch() -> Vector2:
+	var dir: Vector2 = Vector2.ZERO
+	if screen_side == ScreenSide.LEFT:
+		if Input.is_action_pressed("left"):		dir.x -= 1
+		if Input.is_action_pressed("right"):	dir.x += 1
+		if Input.is_action_pressed("up"):			dir.y -= 1
+		if Input.is_action_pressed("down"):		dir.y += 1
+	else:
+		dir = get_viewport().get_mouse_position() - (get_viewport_rect().size / 2)
+		if Input.is_action_just_pressed("shoot"):	emit_signal("stick_released", dir)
+	return dir.normalized()
+			

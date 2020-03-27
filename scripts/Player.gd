@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 onready var fire_spell_scene = preload("res://scenes/FireSpell.tscn")
 
-const MOVEMENT_SPEED: int = 100
+const MOVEMENT_SPEED: int = 80
 const SPELL_SPAWN_DISTANCE_SCALE: int = 20
 
 const MAX_HEALTH: float = 100.0
@@ -47,7 +47,7 @@ func _init() -> void:
 	GameState.register_player(self)	
 
 func _ready() -> void:
-	$Sprite.play("idle_down")
+	$Sprite.play("idle")
 	_change_health(MAX_HEALTH)
 	_change_stamina(MAX_STAMINA)
 
@@ -59,8 +59,10 @@ func _process(delta) -> void:
 	
 	var relative_aim_dir: Vector2 = position + _aim_direction
 	
-	if _aim_direction == Vector2.ZERO: $AttackArea.visible = false
-	else: $AttackArea.visible = true
+	if _aim_direction == Vector2.ZERO: 
+		$AttackArea.visible = false
+	else: 
+		$AttackArea.visible = true
 		
 	$AttackArea.set_rotation(relative_aim_dir.angle_to_point(position))
 	
@@ -69,23 +71,13 @@ func _process(delta) -> void:
 
 func _process_animations(dir) -> void:
 	if dir == Vector2.ZERO:
-		if $Sprite.animation == "down":
-			$Sprite.play("idle_down")
-		if $Sprite.animation == "up":
-			$Sprite.play("idle_up")
-		if $Sprite.animation == "side":
-			$Sprite.play("idle_side")
-		return
-		
-	if abs(dir.x) > abs(dir.y): # side way movement
-		$Sprite.play("side")
-		$Sprite.flip_h = dir.x < 0 
-	else: # vertical movement
-		if dir.y >= 0:
-			$Sprite.play("down")
-		else:
-			$Sprite.play("up")
-
+		$Sprite.play("idle")
+	else:
+		$Sprite.play("walk")
+	
+		if dir.x > 0: $Sprite.flip_h = true
+		else: $Sprite.flip_h = false
+	
 func _change_health(value: float) -> void:
 	_health = min(MAX_HEALTH, max(0.0, value))
 	$UI/HealthBar.update_value(_health)
