@@ -24,4 +24,4 @@ func _physics_process(delta) -> void:
 		var collider = collision.get_collider()
 		if collider.has_method("hit"):
 			collider.hit(DAMAGE, (collision.position - position).normalized())
-			queue_free()
+		queue_free()

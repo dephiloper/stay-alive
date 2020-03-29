@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 onready var fire_spell_scene = preload("res://scenes/FireSpell.tscn")
 
-const MOVEMENT_SPEED: int = 80
+const MOVEMENT_SPEED: int = 100
 const SPELL_SPAWN_DISTANCE_SCALE: int = 20
 
 const MAX_HEALTH: float = 100.0
@@ -32,7 +32,7 @@ func _on_AttackJoystick_stick_released(dir):
 	var fire_spell = fire_spell_scene.instance()
 	fire_spell.position = position + dir.normalized() * SPELL_SPAWN_DISTANCE_SCALE
 	fire_spell.setup(dir)
-	get_node("/root/").add_child(fire_spell)
+	get_parent().add_child(fire_spell)
 	_change_stamina(_stamina - 1)
 
 func _on_AttackJoystick_direction_change(dir) -> void:

@@ -3,7 +3,7 @@ extends Node2D
 onready var blob_scene = preload("res://scenes/Blob.tscn")
 
 func _process(delta) -> void:
-	$Camera2D.position = $Player.position
+	$Camera2D.position = $YSort/Player.position
 
 func _on_SpawnTimer_timeout():
 	var blob = blob_scene.instance()

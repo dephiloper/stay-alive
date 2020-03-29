@@ -10,7 +10,6 @@ onready var touch_button: TouchScreenButton = $TouchButton
 export(Color) var joystick_color: Color = Color.white
 export(Vector2) var default_location 
 export(ScreenSide) var screen_side 
-export(bool) var is_debug = false
 
 const RADIUS: Vector2 = Vector2(128, 128)
 const BOUNDS: int = 224
@@ -19,18 +18,20 @@ const JOYSTICK_RETURN_ACCEL: int = 20
 const MIN_THRESHOLD: int = 40
 const TOUCH_MARGIN: int = 272
 
+var _debug: bool
 var _ongoing_drag: int = -1
 var _prev_dir: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
+	_debug = !GameState.is_mobile
 	touch_button.position -= RADIUS
 	_reset_joystick()
-	if is_debug: visible = false
+	if _debug: visible = false
 
 func _process(delta) -> void:
 	var dir: Vector2 = Vector2.ZERO
 	
-	if is_debug:
+	if _debug:
 		dir = _emulate_touch()
 	else:
 		if _ongoing_drag == -1:
@@ -52,7 +53,7 @@ func _get_centered_pos() -> Vector2:
 	return touch_button.position + RADIUS
 
 func _input(event) -> void:
-	if is_debug: return
+	if _debug: return
 	# first touch interaction
 	if event is InputEventScreenTouch and event.is_pressed() and _input_in_range(event.position):
 		position = _apply_margin(event.position)
