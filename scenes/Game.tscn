@@ -553,8 +553,9 @@ smoothing_enabled = true
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
 visible = false
 material = SubResource( 2 )
-margin_right = 40.0
-margin_bottom = 40.0
+margin_left = -135.0
+margin_right = 1165.0
+margin_bottom = 600.0
 texture = ExtResource( 22 )
 __meta__ = {
 "_edit_use_anchors_": false
