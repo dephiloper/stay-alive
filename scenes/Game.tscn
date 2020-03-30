@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=2]
+[gd_scene load_steps=54 format=2]
 
 [ext_resource path="res://scenes/Joystick.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=2]
@@ -22,8 +22,10 @@
 [ext_resource path="res://img/terrain/terrain10-1.png" type="Texture" id=20]
 [ext_resource path="res://img/terrain/terrain01-1.png" type="Texture" id=21]
 [ext_resource path="res://img/white_rect.png" type="Texture" id=22]
+[ext_resource path="res://img/buttons/run.png" type="Texture" id=23]
 [ext_resource path="res://img/water/water01.png" type="Texture" id=24]
 [ext_resource path="res://img/water/water04.png" type="Texture" id=25]
+[ext_resource path="res://img/buttons/attack.png" type="Texture" id=26]
 [ext_resource path="res://img/water/water00.png" type="Texture" id=27]
 [ext_resource path="res://img/water/water12.png" type="Texture" id=35]
 [ext_resource path="res://img/water/water03.png" type="Texture" id=36]
@@ -567,12 +569,14 @@ __meta__ = {
 scale = Vector2( 0.3, 0.3 )
 joystick_color = Color( 0.215686, 0.47451, 0.807843, 1 )
 default_location = Vector2( 0.12, 0.7 )
+icon = ExtResource( 23 )
 
 [node name="AttackJoystick" parent="UI" instance=ExtResource( 1 )]
 scale = Vector2( 0.25, 0.25 )
 joystick_color = Color( 0.694118, 0.376471, 0.376471, 1 )
 default_location = Vector2( 0.9, 0.8 )
 screen_side = 1
+icon = ExtResource( 26 )
 
 [node name="Ground" type="TileMap" parent="."]
 position = Vector2( 0, 1000 )
@@ -585,6 +589,7 @@ tile_data = PoolIntArray( -1376272, 18, 0, -1376271, 18, 0, -1376270, 18, 0, -13
 wait_time = 3.0
 
 [node name="YSort" type="YSort" parent="."]
+position = Vector2( 1, 0 )
 
 [node name="Player" parent="YSort" instance=ExtResource( 2 )]
 position = Vector2( 510.586, 282.975 )

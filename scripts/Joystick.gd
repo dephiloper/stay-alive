@@ -10,6 +10,7 @@ onready var touch_button: TouchScreenButton = $TouchButton
 export(Color) var joystick_color: Color = Color.white
 export(Vector2) var default_location 
 export(ScreenSide) var screen_side 
+export(Texture) var icon 
 
 const RADIUS: Vector2 = Vector2(128, 128)
 const BOUNDS: int = 224
@@ -24,6 +25,7 @@ var _prev_dir: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	_debug = !GameState.is_mobile
+	$TouchButton/Sprite.texture = icon
 	touch_button.position -= RADIUS
 	_reset_joystick()
 	if _debug: visible = false
