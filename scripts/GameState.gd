@@ -7,7 +7,7 @@ var is_mobile: bool = true
 
 func _init():
 	randomize();
-	is_mobile = OS.get_name() == "Android" or OS.get_name() == "iOS"
+	is_mobile = true #OS.get_name() == "Android" or OS.get_name() == "iOS"
 
 func _ready() -> void:
 	screen_width = get_viewport().get_visible_rect().size.x

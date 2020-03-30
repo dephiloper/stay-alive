@@ -11,7 +11,7 @@ func setup(direction: Vector2, speed: float = 400):
 	_direction = direction
 
 func _ready() -> void:
-	look_at(position + _direction.normalized())
+	look_at(global_position + _direction)
 	
 func _process(delta) -> void:
 	if !$VisibilityNotifier2D.is_on_screen():

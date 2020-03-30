@@ -1,116 +1,164 @@
 extends Sprite
 
-enum ScreenSide {LEFT, RIGHT}
+enum ButtonType {MOVEMENT, ATTACK, SPECIAL}
 
+# signals
 signal direction_change(dir)
+signal stick_pressed()
 signal stick_released(dir)
-
-onready var touch_button: TouchScreenButton = $TouchButton
 
 export(Color) var joystick_color: Color = Color.white
 export(Vector2) var default_location 
-export(ScreenSide) var screen_side 
+export(ButtonType) var button_type 
 export(Texture) var icon 
 
 const RADIUS: Vector2 = Vector2(128, 128)
 const BOUNDS: int = 224
-const TOUCH_START_BOUNDS: int = 448
 const JOYSTICK_RETURN_ACCEL: int = 20
 const MIN_THRESHOLD: int = 40
-const TOUCH_MARGIN: int = 272
+const TOUCH_PADDING: int = 272
 
 var _debug: bool
 var _ongoing_drag: int = -1
 var _prev_dir: Vector2 = Vector2.ZERO
+var _is_pressed: bool = false
+var _is_disabled: bool = false
+
 
 func _ready() -> void:
 	_debug = !GameState.is_mobile
 	$TouchButton/Sprite.texture = icon
-	touch_button.position -= RADIUS
+	$TouchButton.position -= RADIUS
 	_reset_joystick()
 	if _debug: visible = false
 
 func _process(delta) -> void:
+	if _is_disabled:
+		if visible: visible = false
+		return
+		
+	if not visible: visible = true
 	var dir: Vector2 = Vector2.ZERO
 	
-	if _debug:
-		dir = _emulate_touch()
+	# input comes from mouse and keyboard events
+	if _debug: dir = _emulate_touch()
 	else:
-		if _ongoing_drag == -1:
-			var diff_to_center = -RADIUS - touch_button.position
-			touch_button.modulate = Color(joystick_color.r, joystick_color.g, joystick_color.b, 0.2)
-			if diff_to_center.length() > 0.1:
-				touch_button.position += diff_to_center * JOYSTICK_RETURN_ACCEL * delta
-			else:
-				touch_button.position = -RADIUS
-		else:
-			touch_button.modulate = Color(joystick_color.r, joystick_color.g, joystick_color.b, 1.0)
-		dir = _get_value()
+		if _ongoing_drag != -1: # user performs drag
+			$TouchButton.modulate = Color(joystick_color.r, joystick_color.g, joystick_color.b, 1.0)
+		
+		else: # when the user is not dragging, move the stick back to it's origin
+			var diff_to_center: Vector2 = -RADIUS - $TouchButton.position
+			$TouchButton.modulate = Color(joystick_color.r, joystick_color.g, joystick_color.b, 0.2)
+			$TouchButton.position += diff_to_center * JOYSTICK_RETURN_ACCEL * delta
+			if diff_to_center.length() < 0.1:
+				$TouchButton.position = -RADIUS
+	
+		dir = _calculate_direction()
 
-	if dir != _prev_dir:
+	if dir != _prev_dir: # direction changed so call signal
 		emit_signal("direction_change", dir)
 		_prev_dir = dir
 	
-func _get_centered_pos() -> Vector2:
-	return touch_button.position + RADIUS
-
 func _input(event) -> void:
-	if _debug: return
-	# first touch interaction
-	if event is InputEventScreenTouch and event.is_pressed() and _input_in_range(event.position):
-		position = _apply_margin(event.position)
-		 
-	if event is InputEventScreenDrag: # screen drag
-		var touch_to_center_distance: float = (event.position - global_position).length()
+	if _is_disabled or _debug: return
 	
-		if touch_to_center_distance <= TOUCH_START_BOUNDS * touch_button.global_scale.x \
-		or event.get_index() == _ongoing_drag:
-			touch_button.global_position = event.position - RADIUS * touch_button.global_scale
+	if event is InputEventScreenTouch:
+		# when stick is pressed
+		if event.is_pressed() and _input_in_range(event.position):
+			_is_pressed = true
+			position = _apply_touch_padding(event.position)
+			emit_signal("stick_pressed")
+			#print("pressed ", button_type)
 			
-			if _get_centered_pos().length() > BOUNDS:
-				touch_button.position = _get_centered_pos().normalized() * BOUNDS - RADIUS
-			
-			_ongoing_drag = event.get_index()
+		# when stick is released
+		if !event.is_pressed() and _is_pressed:
+			print("reset joystick ", button_type)
+			_reset_joystick()
+			_is_pressed = false
+			if event.get_index() != _ongoing_drag:
+				_ongoing_drag = -1
+				
+			emit_signal("stick_released", _calculate_direction())
+			#print("released ", button_type)
 		
-	if event is InputEventScreenTouch and !event.is_pressed():
-		_reset_joystick()
-		if event.get_index() == _ongoing_drag:
-			_ongoing_drag = -1
-			emit_signal("stick_released", _get_value())
+		#print("touch ongoing ", _ongoing_drag)
+		
+	# when stick is dragged
+	if event is InputEventScreenDrag:
+		# allows the user to drag inside the other screen half without 
+		# touching the other buttons
+		if (!_input_in_range(event.position) and _ongoing_drag != event.get_index()) or !_is_pressed:
+			return
+		
+		# set the inner stick position to the corresponding position relative
+		# to the users touch location
+		$TouchButton.global_position = event.position - RADIUS * $TouchButton.global_scale
+		
+		# evaluates when the stick is dragged out further than the bounds
+		# limits the sticks position to be inside the bounds
+		if _get_button_center().length() > BOUNDS:
+			$TouchButton.position = _get_button_center().normalized() * BOUNDS - RADIUS
+		
+		# gets set when a drag occurs (evaluates no longer to 0)
+		_ongoing_drag = event.get_index()
+		
+		#print("drag ongoing ", _ongoing_drag)
 
-func _get_value() -> Vector2:
-	if _get_centered_pos().length() > MIN_THRESHOLD:
-		return _get_centered_pos() / BOUNDS
+# returns the center of the outer joystick area
+func _get_button_center() -> Vector2:
+	return $TouchButton.position + RADIUS
+
+# calculates the absolute direction vector of the stick
+func _calculate_direction() -> Vector2:
+	if _get_button_center().length() > MIN_THRESHOLD:
+		return _get_button_center() / BOUNDS
 	
 	return Vector2.ZERO
 
-func _input_in_range(pos: Vector2) -> bool:
-	if screen_side == ScreenSide.LEFT:
-		return pos.x > 0 and pos.x < GameState.screen_width * 0.5
-	else:
-		return pos.x > GameState.screen_width * 0.5 and pos.x < GameState.screen_width
+# checks if the touch position is inside a specific area 
+func _input_in_range(touch_pos: Vector2) -> bool:
+	match button_type:
+		ButtonType.MOVEMENT:	# movement stick corresponds to left area of the screen
+			return touch_pos.x > 0 and touch_pos.x < GameState.screen_width * 0.5
+		ButtonType.ATTACK:		# attack stick corresponds to right area of the screen
+			return touch_pos.x > GameState.screen_width * 0.5 and touch_pos.x < GameState.screen_width
+		ButtonType.SPECIAL: # for special button only check specific radius around the button
+			return touch_pos.distance_to(position) < 64
+	assert(false)
+	return false # this should never happen!
 
-func _apply_margin(pos: Vector2) -> Vector2:
-	var margin: float = TOUCH_MARGIN * touch_button.global_scale.x
+# sets a padding to the game screen to prevent touching on the screen border
+func _apply_touch_padding(pos: Vector2) -> Vector2:
+	var padding: float = TOUCH_PADDING * $TouchButton.global_scale.x
 	
-	pos.x = max(margin, min(GameState.screen_width - margin, pos.x))
-	pos.y = max(margin, min(GameState.screen_height - margin, pos.y))
+	pos.x = max(padding, min(GameState.screen_width - padding, pos.x))
+	pos.y = max(padding, min(GameState.screen_height - padding, pos.y))
 	
 	return pos
 
+# resets the joystick after the touch was released to it's default location
 func _reset_joystick() -> void:
 		position.x = default_location.x * GameState.screen_width
 		position.y = default_location.y * GameState.screen_height
-		
+
+# method for controlling the game with mouse and keyboard
 func _emulate_touch() -> Vector2:
 	var dir: Vector2 = Vector2.ZERO
-	if screen_side == ScreenSide.LEFT:
-		if Input.is_action_pressed("left"):		dir.x -= 1
-		if Input.is_action_pressed("right"):	dir.x += 1
-		if Input.is_action_pressed("up"):			dir.y -= 1
-		if Input.is_action_pressed("down"):		dir.y += 1
-	else:
-		dir = get_viewport().get_mouse_position() - (get_viewport_rect().size / 2)
-		if Input.is_action_just_pressed("shoot"):	emit_signal("stick_released", dir)
+	match button_type:
+		ButtonType.MOVEMENT:
+			if Input.is_action_pressed("left"):		dir.x -= 1
+			if Input.is_action_pressed("right"):	dir.x += 1
+			if Input.is_action_pressed("up"):			dir.y -= 1
+			if Input.is_action_pressed("down"):		dir.y += 1
+		ButtonType.ATTACK:
+			dir = get_viewport().get_mouse_position() - (get_viewport_rect().size / 2)
+			if Input.is_action_just_pressed("shoot"):
+				emit_signal("stick_released", dir)
+		
 	return dir.normalized()
-			
+
+func _on_Neighbor_Joystick_stick_pressed():
+		_is_disabled = true
+
+func _on_Neighbor_Joystick_stick_released(dir):
+		_is_disabled = false
