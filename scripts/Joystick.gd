@@ -21,7 +21,7 @@ const TOUCH_PADDING: int = 272
 var _debug: bool
 var _ongoing_drag: int = -1
 var _prev_dir: Vector2 = Vector2.ZERO
-var _is_pressed: bool = false
+var _active_finger: int = -1
 var _is_disabled: bool = false
 
 
@@ -65,29 +65,25 @@ func _input(event) -> void:
 	if event is InputEventScreenTouch:
 		# when stick is pressed
 		if event.is_pressed() and _input_in_range(event.position):
-			_is_pressed = true
+			_active_finger = event.get_index()
 			position = _apply_touch_padding(event.position)
 			emit_signal("stick_pressed")
-			#print("pressed ", button_type)
 			
 		# when stick is released
-		if !event.is_pressed() and _is_pressed:
+		if !event.is_pressed() and _active_finger == event.get_index():
 			print("reset joystick ", button_type)
 			_reset_joystick()
-			_is_pressed = false
-			if event.get_index() != _ongoing_drag:
+			_active_finger = -1
+			if event.get_index() == _ongoing_drag:
 				_ongoing_drag = -1
-				
+				print("stopped drag ", button_type)
 			emit_signal("stick_released", _calculate_direction())
-			#print("released ", button_type)
-		
-		#print("touch ongoing ", _ongoing_drag)
 		
 	# when stick is dragged
 	if event is InputEventScreenDrag:
 		# allows the user to drag inside the other screen half without 
 		# touching the other buttons
-		if (!_input_in_range(event.position) and _ongoing_drag != event.get_index()) or !_is_pressed:
+		if (!_input_in_range(event.position) and _ongoing_drag != event.get_index()) or _active_finger == -1:
 			return
 		
 		# set the inner stick position to the corresponding position relative
@@ -99,11 +95,9 @@ func _input(event) -> void:
 		if _get_button_center().length() > BOUNDS:
 			$TouchButton.position = _get_button_center().normalized() * BOUNDS - RADIUS
 		
-		# gets set when a drag occurs (evaluates no longer to 0)
+		# gets set when a drag occours (evaluates no longer to 0)
 		_ongoing_drag = event.get_index()
 		
-		#print("drag ongoing ", _ongoing_drag)
-
 # returns the center of the outer joystick area
 func _get_button_center() -> Vector2:
 	return $TouchButton.position + RADIUS
@@ -157,8 +151,8 @@ func _emulate_touch() -> Vector2:
 		
 	return dir.normalized()
 
-func _on_Neighbor_Joystick_stick_pressed():
+func _on_Neighbor_Joystick_stick_pressed() -> void:
 		_is_disabled = true
 
-func _on_Neighbor_Joystick_stick_released(dir):
+func _on_Neighbor_Joystick_stick_released(dir) -> void:
 		_is_disabled = false
