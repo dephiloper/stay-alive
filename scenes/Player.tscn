@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://img/demon/walk/demon_walk1.png" type="Texture" id=1]
 [ext_resource path="res://scripts/Player.gd" type="Script" id=2]
@@ -25,6 +25,8 @@
 [ext_resource path="res://img/demon/idle/demon_idle11.png" type="Texture" id=23]
 [ext_resource path="res://img/demon/idle/demon_idle10.png" type="Texture" id=24]
 [ext_resource path="res://img/demon/idle/demon_idle12.png" type="Texture" id=25]
+[ext_resource path="res://scenes/CircularAttackArea.tscn" type="PackedScene" id=26]
+[ext_resource path="res://scenes/RangeAttackArea.tscn" type="PackedScene" id=27]
 [ext_resource path="res://scenes/HealthBar.tscn" type="PackedScene" id=32]
 [ext_resource path="res://scenes/StaminaBar.tscn" type="PackedScene" id=33]
 [ext_resource path="res://img/stamina_bar/border.png" type="Texture" id=34]
@@ -47,35 +49,26 @@ animations = [ {
 [node name="Player" type="KinematicBody2D"]
 collision_mask = 6
 script = ExtResource( 2 )
+attack_area_scene = ExtResource( 27 )
+special_area_scene = ExtResource( 26 )
 
 [node name="Sprite" type="AnimatedSprite" parent="."]
-position = Vector2( 0, -12 )
+position = Vector2( 0, -20 )
 scale = Vector2( 0.7, 0.7 )
 frames = SubResource( 1 )
 animation = "walk"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( -1, 8 )
 z_index = 1
 shape = SubResource( 2 )
-
-[node name="AttackArea" type="ColorRect" parent="."]
-self_modulate = Color( 1, 1, 1, 0.392157 )
-margin_top = -15.0
-margin_right = 200.0
-margin_bottom = 15.0
-rect_pivot_offset = Vector2( 0, 15 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="UI" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -64.0
-margin_top = -77.0
+margin_top = -87.0
 margin_right = 64.0
-margin_bottom = -47.0
+margin_bottom = -57.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
