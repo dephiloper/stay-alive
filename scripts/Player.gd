@@ -1,12 +1,12 @@
 extends KinematicBody2D
 
-onready var fire_spell_scene = preload("res://scenes/FireSpell.tscn")
-
-export(PackedScene) var attack_area_scene
-export(PackedScene) var special_area_scene
+export(PackedScene) var attack_area_scene: PackedScene
+export(PackedScene) var special_area_scene: PackedScene
+export(PackedScene) var attack_scene: PackedScene
+export(PackedScene) var special_scene: PackedScene
 
 const MOVEMENT_SPEED: int = 100
-const SPELL_SPAWN_DISTANCE_SCALE: int = 20
+const ATTACK_SPAWN_DISTANCE_SCALE: int = 20
 
 const MAX_HEALTH: float = 100.0
 const MAX_STAMINA: int = 3
@@ -41,7 +41,7 @@ func _ready() -> void:
 	add_child(_attack_area)
 	add_child(_special_area)
 
-func _process(delta) -> void:
+func _physics_process(_delta: float) -> void:
 	move_and_slide(_move_direction * MOVEMENT_SPEED)
 	if _move_direction != _prev_move_direction:
 		_process_animations(_move_direction)
@@ -51,25 +51,26 @@ func _process(delta) -> void:
 	_process_attack(_special_area, _special_direction, _stamina == 0, _special_pressed)
 
 func _process_animations(dir: Vector2) -> void:
-	if dir != Vector2.ZERO: $Sprite.play("walk")
-	else: $Sprite.play("idle")
+	if dir != Vector2.ZERO: 
+		$Sprite.play("walk")
+	else: 
+		$Sprite.play("idle")
 	
-	if dir.x > 0: $Sprite.flip_h = true
-	else: $Sprite.flip_h = false
+	$Sprite.flip_h = dir.x > 0
 
 func _process_attack(area: Node2D, dir: Vector2, on_cooldown: bool, is_visible: bool):
 	area.visible = is_visible
 	area.set_direction(dir)
 	
-	if on_cooldown: _attack_area.disable()
-	else: _attack_area.enable()
+	if on_cooldown: area.disable()
+	else: area.enable()
 
 func _change_health(value: float) -> void:
 	_health = min(MAX_HEALTH, max(0.0, value))
 	$UI/HealthBar.update_value(_health)
 
 func _change_stamina(value: int) -> void:
-	_stamina = min(MAX_STAMINA, max(0.0, value))
+	_stamina = min(MAX_STAMINA, max(0, value))
 	$UI/StaminaBar.update_value(_stamina)
 
 func _on_StaminaTimer_timeout() -> void:
@@ -98,16 +99,28 @@ func _on_AttackJoystick_stick_released(dir) -> void:
 	if $StaminaTimer.is_stopped():
 		$StaminaTimer.start()
 	
-	if _stamina == 0: return
+	if _stamina == 0: 
+		$UI/StaminaBar.shake()
+		return
 	
 	if dir == Vector2.ZERO:
 		dir = Vector2.UP
 	
-	var fire_spell = fire_spell_scene.instance()
-	fire_spell.position = position + dir.normalized() * SPELL_SPAWN_DISTANCE_SCALE
-	fire_spell.setup(dir.normalized())
-	get_node("/root/Game/YSort").add_child(fire_spell)
+	var attack = attack_scene.instance()
+	attack.position = position + dir.normalized() * ATTACK_SPAWN_DISTANCE_SCALE
+	attack.setup(dir.normalized())
+	get_node("/root/Game/YSort").add_child(attack)
 	_change_stamina(_stamina - 1)
 
-func _on_SpecialJoystick_stick_released(dir):
+func _on_SpecialJoystick_stick_released(dir: Vector2):
 	_special_pressed = false
+	
+	if $StaminaTimer.is_stopped():
+		$StaminaTimer.start()
+	
+	if _stamina == 0: return
+	
+	var special = special_scene.instance()
+	special.position = position + dir * special.MAX_RADIUS
+	get_node("/root/Game/YSort").add_child(special)
+	_change_stamina(_stamina - 1)

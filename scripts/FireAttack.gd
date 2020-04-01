@@ -3,6 +3,7 @@ extends KinematicBody2D
 var _speed: float
 var _velocity: Vector2 = Vector2.ZERO
 var _direction: Vector2
+var _elapsed_time: float = 0.0
 const DAMAGE: int = 20
 
 func setup(direction: Vector2, speed: float = 400):
@@ -12,8 +13,12 @@ func setup(direction: Vector2, speed: float = 400):
 
 func _ready() -> void:
 	look_at(global_position + _direction)
+	var angle = rad2deg(_direction.angle_to(Vector2.RIGHT))
+	$Particles2D.angle = angle
+	$Particles2D.emitting = true
 	
 func _process(delta) -> void:
+	_elapsed_time += delta
 	if !$VisibilityNotifier2D.is_on_screen():
 		queue_free()
 		

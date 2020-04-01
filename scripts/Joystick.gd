@@ -41,7 +41,9 @@ func _process(delta) -> void:
 	var dir: Vector2 = Vector2.ZERO
 	
 	# input comes from mouse and keyboard events
-	if _debug: dir = _emulate_touch()
+	if _debug: 
+		dir = _emulate_touch()
+		visible = false
 	else:
 		if _ongoing_drag != -1: # user performs drag
 			$TouchButton.modulate = Color(joystick_color.r, joystick_color.g, joystick_color.b, 1.0)
@@ -71,12 +73,10 @@ func _input(event) -> void:
 			
 		# when stick is released
 		if !event.is_pressed() and _active_finger == event.get_index():
-			print("reset joystick ", button_type)
 			_reset_joystick()
 			_active_finger = -1
 			if event.get_index() == _ongoing_drag:
 				_ongoing_drag = -1
-				print("stopped drag ", button_type)
 			emit_signal("stick_released", _calculate_direction())
 		
 	# when stick is dragged
@@ -138,21 +138,36 @@ func _reset_joystick() -> void:
 # method for controlling the game with mouse and keyboard
 func _emulate_touch() -> Vector2:
 	var dir: Vector2 = Vector2.ZERO
+	var mouse_dir: Vector2 = get_viewport().get_mouse_position() - (get_viewport_rect().size / 2)
+	if mouse_dir.length() > 150:
+		mouse_dir = mouse_dir.normalized()
+	else:
+		mouse_dir = mouse_dir / 150
+	
 	match button_type:
 		ButtonType.MOVEMENT:
 			if Input.is_action_pressed("left"):		dir.x -= 1
 			if Input.is_action_pressed("right"):	dir.x += 1
 			if Input.is_action_pressed("up"):			dir.y -= 1
 			if Input.is_action_pressed("down"):		dir.y += 1
+			dir = dir.normalized()
 		ButtonType.ATTACK:
-			dir = get_viewport().get_mouse_position() - (get_viewport_rect().size / 2)
-			if Input.is_action_just_pressed("shoot"):
-				emit_signal("stick_released", dir)
-		
-	return dir.normalized()
+			if Input.is_action_pressed("shoot"):
+				dir = mouse_dir
+				emit_signal("stick_pressed")
+			if Input.is_action_just_released("shoot"):
+				emit_signal("stick_released", mouse_dir)
+		ButtonType.SPECIAL:
+			if Input.is_action_pressed("special"):
+				emit_signal("stick_pressed")
+				dir = mouse_dir
+			if Input.is_action_just_released("special"):
+				emit_signal("stick_released", mouse_dir)
+	
+	return dir
 
 func _on_Neighbor_Joystick_stick_pressed() -> void:
 		_is_disabled = true
 
-func _on_Neighbor_Joystick_stick_released(dir) -> void:
+func _on_Neighbor_Joystick_stick_released(_dir) -> void:
 		_is_disabled = false

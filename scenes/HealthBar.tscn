@@ -2,7 +2,7 @@
 
 [ext_resource path="res://img/healthbar/border.png" type="Texture" id=1]
 [ext_resource path="res://img/healthbar/progress.png" type="Texture" id=2]
-[ext_resource path="res://scenes/HealthBar.gd" type="Script" id=3]
+[ext_resource path="res://scripts/HealthBar.gd" type="Script" id=3]
 
 [node name="HealthBar" type="TextureProgress"]
 anchor_right = 0.422

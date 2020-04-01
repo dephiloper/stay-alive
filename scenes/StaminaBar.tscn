@@ -4,7 +4,6 @@
 [ext_resource path="res://img/stamina_bar/border_alternative.png" type="Texture" id=2]
 [ext_resource path="res://scripts/StaminaBar.gd" type="Script" id=3]
 
-
 [node name="StaminaBar" type="TextureProgress"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -22,3 +21,5 @@ script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Tween" type="Tween" parent="."]
