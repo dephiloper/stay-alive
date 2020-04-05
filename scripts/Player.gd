@@ -6,10 +6,12 @@ export(PackedScene) var attack_scene: PackedScene
 export(PackedScene) var special_scene: PackedScene
 
 const MOVEMENT_SPEED: int = 100
-const ATTACK_SPAWN_DISTANCE_SCALE: int = 20
+const ATTACK_SPAWN_DISTANCE: int = 20
+const SPECIAL_MAX_DISTANCE: int = 150
 
 const MAX_HEALTH: float = 100.0
 const MAX_STAMINA: int = 3
+
 
 # player stats
 var _health: float
@@ -18,7 +20,7 @@ var _stamina: int
 var _attack_area: Node2D
 var _special_area: Node2D
 
-var _move_direction: Vector2 = Vector2.ZERO
+var move_direction: Vector2 = Vector2.ZERO
 var _prev_move_direction: Vector2 = Vector2.ZERO
 var _attack_direction: Vector2 = Vector2.ZERO
 var _special_direction: Vector2 = Vector2.ZERO
@@ -30,6 +32,7 @@ func hit(damage: int):
 	
 func _init() -> void:
 	GameState.register_player(self)
+	add_to_group("Player")
 
 func _ready() -> void:
 	$Sprite.play("idle")
@@ -42,10 +45,10 @@ func _ready() -> void:
 	add_child(_special_area)
 
 func _physics_process(_delta: float) -> void:
-	move_and_slide(_move_direction * MOVEMENT_SPEED)
-	if _move_direction != _prev_move_direction:
-		_process_animations(_move_direction)
-		_prev_move_direction = _move_direction
+	move_and_slide(move_direction * MOVEMENT_SPEED)
+	if move_direction != _prev_move_direction:
+		_process_animations(move_direction)
+		_prev_move_direction = move_direction
 	
 	_process_attack(_attack_area, _attack_direction, _stamina == 0, _attack_pressed and _attack_direction != Vector2.ZERO)
 	_process_attack(_special_area, _special_direction, _stamina == 0, _special_pressed)
@@ -79,7 +82,7 @@ func _on_StaminaTimer_timeout() -> void:
 		$StaminaTimer.start()
 
 func _on_MovementJoystick_direction_change(dir) -> void:
-	_move_direction = dir
+	move_direction = dir
 
 func _on_AttackJoystick_direction_change(dir) -> void:
 	_attack_direction = dir
@@ -107,9 +110,9 @@ func _on_AttackJoystick_stick_released(dir) -> void:
 		dir = Vector2.UP
 	
 	var attack = attack_scene.instance()
-	attack.position = position + dir.normalized() * ATTACK_SPAWN_DISTANCE_SCALE
+	attack.position = position + dir.normalized() * ATTACK_SPAWN_DISTANCE
 	attack.setup(dir.normalized())
-	get_node("/root/Game/YSort").add_child(attack)
+	GameState.global_ysort.add_child(attack)
 	_change_stamina(_stamina - 1)
 
 func _on_SpecialJoystick_stick_released(dir: Vector2):
@@ -121,6 +124,6 @@ func _on_SpecialJoystick_stick_released(dir: Vector2):
 	if _stamina == 0: return
 	
 	var special = special_scene.instance()
-	special.position = position + dir * special.MAX_RADIUS
-	get_node("/root/Game/YSort").add_child(special)
+	special.position = position + dir * SPECIAL_MAX_DISTANCE
+	GameState.global_ysort.add_child(special)
 	_change_stamina(_stamina - 1)

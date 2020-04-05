@@ -80,7 +80,6 @@ margin_right = 56.0
 margin_bottom = -66.0
 rect_scale = Vector2( 0.6, 0.6 )
 value = 50.0
-tint_under = Color( 1, 1, 1, 0.25098 )
 tint_progress = Color( 0.968627, 0.0392157, 0.0392157, 0.501961 )
 
 [node name="StaminaBar" parent="UI" instance=ExtResource( 33 )]
@@ -94,7 +93,6 @@ rect_scale = Vector2( 0.6, 0.6 )
 rect_pivot_offset = Vector2( 50, 8 )
 value = 33.0
 texture_over = ExtResource( 34 )
-tint_under = Color( 1, 1, 1, 0.25098 )
 tint_progress = Color( 0.0537262, 0.416498, 0.982422, 0.501961 )
 
 [node name="StaminaTimer" type="Timer" parent="."]
