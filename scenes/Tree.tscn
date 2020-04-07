@@ -35,7 +35,11 @@ z_index = 1
 shape = SubResource( 1 )
 
 [node name="SeeThroughArea2D" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SeeThroughArea2D"]
 position = Vector2( 0, -92 )
 shape = SubResource( 2 )
+[connection signal="area_entered" from="SeeThroughArea2D" to="." method="_on_SeeThroughArea2D_area_entered"]
+[connection signal="area_exited" from="SeeThroughArea2D" to="." method="_on_SeeThroughArea2D_area_exited"]

@@ -8,7 +8,7 @@ height = 37.0616
 
 [node name="Rock02" type="StaticBody2D"]
 collision_layer = 4
-collision_mask = 11
+collision_mask = 3
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )

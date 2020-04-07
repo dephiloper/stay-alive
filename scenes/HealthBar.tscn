@@ -12,12 +12,13 @@ margin_top = -10.0
 margin_right = -376.128
 margin_bottom = -57.2
 rect_pivot_offset = Vector2( 56, 10 )
+value = 100.0
 texture_under = ExtResource( 2 )
 texture_over = ExtResource( 1 )
 texture_progress = ExtResource( 2 )
 tint_under = Color( 1, 1, 1, 0.25098 )
 tint_over = Color( 0, 0, 0, 1 )
-tint_progress = Color( 0.807843, 0.286275, 0.286275, 1 )
+tint_progress = Color( 0.968627, 0.0392157, 0.0392157, 0.501961 )
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false

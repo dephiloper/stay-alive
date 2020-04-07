@@ -1,12 +1,23 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://img/blob/enemy1.png" type="Texture" id=1]
 [ext_resource path="res://img/blob/enemy0.png" type="Texture" id=2]
 [ext_resource path="res://img/blob/enemy2.png" type="Texture" id=3]
 [ext_resource path="res://scripts/Blob.gd" type="Script" id=4]
 [ext_resource path="res://img/trees/tree-shadow.png" type="Texture" id=5]
+[ext_resource path="res://img/attacks/land_attack.png" type="Texture" id=6]
+[ext_resource path="res://scenes/HealthBar.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scenes/HealthSystem.tscn" type="PackedScene" id=8]
 
-[sub_resource type="SpriteFrames" id=1]
+[sub_resource type="CapsuleShape2D" id=1]
+radius = 23.3572
+height = 12.009
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 45.2992
+height = 30.7
+
+[sub_resource type="SpriteFrames" id=3]
 animations = [ {
 "frames": [ ExtResource( 2 ), ExtResource( 1 ), ExtResource( 3 ) ],
 "loop": true,
@@ -14,26 +25,49 @@ animations = [ {
 "speed": 3.0
 } ]
 
-[sub_resource type="CapsuleShape2D" id=2]
-radius = 23.3572
-height = 12.009
-
 [node name="Blob" type="KinematicBody2D"]
 collision_layer = 2
-collision_mask = 13
+collision_mask = 44
 script = ExtResource( 4 )
 
-[node name="Label" type="Label" parent="."]
-margin_left = -37.0281
-margin_top = -64.7895
-margin_right = 36.9719
-margin_bottom = -39.7895
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="DamageArea" type="Area2D" parent="."]
+z_index = -1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageArea"]
+position = Vector2( 0, 28 )
+rotation = 1.5708
+shape = SubResource( 2 )
+
+[node name="HealthSystem" parent="." instance=ExtResource( 8 )]
+
+[node name="UI" type="Node2D" parent="."]
+
+[node name="Label" type="Label" parent="UI"]
+margin_left = -36.8703
+margin_top = -77.8852
+margin_right = 37.1297
+margin_bottom = -52.8852
 text = "charge"
 align = 1
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="HealthBar" parent="UI" instance=ExtResource( 7 )]
+margin_top = -50.0
+margin_right = 56.0
+margin_bottom = -30.0
+rect_scale = Vector2( 0.5, 0.5 )
+
+[node name="LandArea" type="Sprite" parent="."]
+modulate = Color( 0.156863, 0.32549, 0.619608, 0.501961 )
+position = Vector2( 0, 28 )
+scale = Vector2( 0.7, 0.7 )
+texture = ExtResource( 6 )
 
 [node name="Shadow" type="Sprite" parent="."]
 position = Vector2( 0, -20 )
@@ -42,11 +76,9 @@ texture = ExtResource( 5 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 0.15, 0.15 )
-frames = SubResource( 1 )
+frames = SubResource( 3 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 2 )
-
-[node name="DamageTween" type="Tween" parent="."]
-
-[node name="JumpTween" type="Tween" parent="."]
+[node name="LandTween" type="Tween" parent="."]
+[connection signal="body_entered" from="DamageArea" to="." method="_on_DamageArea_body_entered"]
+[connection signal="dead" from="HealthSystem" to="." method="_on_HealthSystem_dead"]
+[connection signal="health_updated" from="HealthSystem" to="UI/HealthBar" method="_on_HealthSystem_health_updated"]

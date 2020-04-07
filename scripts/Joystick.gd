@@ -24,33 +24,29 @@ var _prev_dir: Vector2 = Vector2.ZERO
 var _active_finger: int = -1
 var _is_disabled: bool = false
 
-
 func _ready() -> void:
 	_debug = !GameState.is_mobile
 	$TouchButton/Sprite.texture = icon
 	$TouchButton.position -= RADIUS
-	_reset_joystick()
+	_reset_position()
 	if _debug: visible = false
 
 func _process(delta) -> void:
 	if _is_disabled:
-		if visible: visible = false
 		return
 		
-	if not visible: visible = true
 	var dir: Vector2 = Vector2.ZERO
 	
 	# input comes from mouse and keyboard events
 	if _debug: 
 		dir = _emulate_touch()
-		visible = false
 	else:
 		if _ongoing_drag != -1: # user performs drag
 			$TouchButton.modulate = Color(joystick_color.r, joystick_color.g, joystick_color.b, 1.0)
 		
 		else: # when the user is not dragging, move the stick back to it's origin
 			var diff_to_center: Vector2 = -RADIUS - $TouchButton.position
-			$TouchButton.modulate = Color(joystick_color.r, joystick_color.g, joystick_color.b, 0.2)
+			$TouchButton.modulate = Color(joystick_color.r, joystick_color.g, joystick_color.b, 0.5)
 			$TouchButton.position += diff_to_center * JOYSTICK_RETURN_ACCEL * delta
 			if diff_to_center.length() < 0.1:
 				$TouchButton.position = -RADIUS
@@ -73,7 +69,7 @@ func _input(event) -> void:
 			
 		# when stick is released
 		if !event.is_pressed() and _active_finger == event.get_index():
-			_reset_joystick()
+			_reset_position()
 			_active_finger = -1
 			if event.get_index() == _ongoing_drag:
 				_ongoing_drag = -1
@@ -131,7 +127,7 @@ func _apply_touch_padding(pos: Vector2) -> Vector2:
 	return pos
 
 # resets the joystick after the touch was released to it's default location
-func _reset_joystick() -> void:
+func _reset_position() -> void:
 		position.x = default_location.x * GameState.screen_width
 		position.y = default_location.y * GameState.screen_height
 
@@ -157,6 +153,8 @@ func _emulate_touch() -> Vector2:
 				emit_signal("stick_pressed")
 			if Input.is_action_just_released("shoot"):
 				emit_signal("stick_released", mouse_dir)
+			if Input.is_action_just_released("dash"):
+				emit_signal("stick_released", Vector2.ZERO)
 		ButtonType.SPECIAL:
 			if Input.is_action_pressed("special"):
 				emit_signal("stick_pressed")
@@ -166,8 +164,8 @@ func _emulate_touch() -> Vector2:
 	
 	return dir
 
-func _on_Neighbor_Joystick_stick_pressed() -> void:
-		_is_disabled = true
+#func _on_NeighborButton_pressed() -> void:
+#	_is_disabled = true
 
-func _on_Neighbor_Joystick_stick_released(_dir) -> void:
-		_is_disabled = false
+#func _on_NeighborButton_released() -> void:
+#	_is_disabled = false

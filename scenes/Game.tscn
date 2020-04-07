@@ -2,7 +2,6 @@
 
 [ext_resource path="res://scenes/Joystick.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scripts/Game.gd" type="Script" id=3]
 [ext_resource path="res://img/water/water24.png" type="Texture" id=4]
 [ext_resource path="res://img/water/water18.png" type="Texture" id=5]
 [ext_resource path="res://img/water/water19.png" type="Texture" id=6]
@@ -28,6 +27,7 @@
 [ext_resource path="res://img/buttons/attack.png" type="Texture" id=26]
 [ext_resource path="res://img/water/water00.png" type="Texture" id=27]
 [ext_resource path="res://scenes/Blob.tscn" type="PackedScene" id=28]
+[ext_resource path="res://scenes/Camera.tscn" type="PackedScene" id=29]
 [ext_resource path="res://img/water/water12.png" type="Texture" id=35]
 [ext_resource path="res://img/water/water03.png" type="Texture" id=36]
 [ext_resource path="res://img/water/water02.png" type="Texture" id=37]
@@ -543,13 +543,8 @@ points = PoolVector2Array( 63.6111, 0.243103, 64.3055, 47.4653, 21.25, 46.7709, 
 46/z_index = 0
 
 [node name="Game" type="Node2D"]
-script = ExtResource( 3 )
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 512, 300 )
-current = true
-zoom = Vector2( 0.8, 0.8 )
-smoothing_enabled = true
+[node name="Camera" parent="." instance=ExtResource( 29 )]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -579,13 +574,6 @@ default_location = Vector2( 0.9, 0.8 )
 button_type = 1
 icon = ExtResource( 26 )
 
-[node name="SpecialJoystick" parent="UI" instance=ExtResource( 1 )]
-scale = Vector2( 0.2, 0.2 )
-joystick_color = Color( 0.447059, 0.694118, 0.376471, 1 )
-default_location = Vector2( 0.78, 0.76 )
-button_type = 2
-icon = ExtResource( 26 )
-
 [node name="Ground" type="TileMap" parent="."]
 position = Vector2( 0, 1000 )
 z_index = -1
@@ -599,61 +587,75 @@ position = Vector2( 1, 0 )
 [node name="Player" parent="YSort" instance=ExtResource( 2 )]
 position = Vector2( 510.586, 282.975 )
 
-[node name="Blob" parent="YSort" instance=ExtResource( 28 )]
-position = Vector2( 339.998, 592.915 )
-
 [node name="Tree" parent="YSort" instance=ExtResource( 12 )]
-position = Vector2( -6.06046, 788.4 )
+position = Vector2( 315.609, 551.445 )
 
 [node name="Tree7" parent="YSort" instance=ExtResource( 12 )]
-position = Vector2( -122.974, 911.994 )
+position = Vector2( 602.11, 522.925 )
 
 [node name="Tree8" parent="YSort" instance=ExtResource( 12 )]
-position = Vector2( -12.7412, 977.131 )
+position = Vector2( 712.343, 588.062 )
 
 [node name="Tree2" parent="YSort" instance=ExtResource( 12 )]
-position = Vector2( 64.2362, 877.285 )
+position = Vector2( 789.32, 488.216 )
 
 [node name="Tree5" parent="YSort" instance=ExtResource( 12 )]
-position = Vector2( 141.778, 788.86 )
+position = Vector2( 463.447, 551.905 )
 
 [node name="Tree6" parent="YSort" instance=ExtResource( 12 )]
-position = Vector2( 132.497, 658.453 )
+position = Vector2( 454.166, 421.498 )
 
 [node name="Tree9" parent="YSort" instance=ExtResource( 12 )]
-position = Vector2( 159.22, 935.704 )
+position = Vector2( 884.304, 546.635 )
 
 [node name="Tree10" parent="YSort" instance=ExtResource( 12 )]
-position = Vector2( 72.3707, 1059.3 )
+position = Vector2( 797.455, 670.231 )
 
 [node name="Tree11" parent="YSort" instance=ExtResource( 12 )]
-position = Vector2( -118.031, 1044.27 )
+position = Vector2( 607.053, 655.201 )
 
 [node name="Tree12" parent="YSort" instance=ExtResource( 12 )]
-position = Vector2( -261.667, 1077.67 )
+position = Vector2( 463.417, 688.601 )
 
 [node name="Tree3" parent="YSort" instance=ExtResource( 12 )]
-position = Vector2( 30.1175, 621.614 )
+position = Vector2( 351.787, 384.659 )
 
 [node name="Tree4" parent="YSort" instance=ExtResource( 12 )]
-position = Vector2( -85.2932, 716.093 )
+position = Vector2( 236.376, 479.138 )
 
 [node name="Rock01" parent="YSort" instance=ExtResource( 13 )]
-position = Vector2( 514.474, 616.258 )
+position = Vector2( 563.448, 714.206 )
+
+[node name="Rock04" parent="YSort" instance=ExtResource( 13 )]
+position = Vector2( 563.448, 714.206 )
+
+[node name="Rock05" parent="YSort" instance=ExtResource( 13 )]
+position = Vector2( 668.197, 342.821 )
+
+[node name="Rock06" parent="YSort" instance=ExtResource( 13 )]
+position = Vector2( 256.001, 661.151 )
 
 [node name="Rock02" parent="YSort" instance=ExtResource( 15 )]
-position = Vector2( 684.731, 551.486 )
+position = Vector2( 733.705, 649.434 )
+
+[node name="Rock07" parent="YSort" instance=ExtResource( 15 )]
+position = Vector2( 533.729, 522.918 )
+
+[node name="Rock08" parent="YSort" instance=ExtResource( 15 )]
+position = Vector2( 418.096, 212.751 )
 
 [node name="Rock03" parent="YSort" instance=ExtResource( 14 )]
-position = Vector2( 516.324, 488.565 )
+position = Vector2( 445.298, 794.513 )
+
+[node name="Rock09" parent="YSort" instance=ExtResource( 14 )]
+position = Vector2( 162.338, 334.703 )
+
+[node name="Rock10" parent="YSort" instance=ExtResource( 14 )]
+position = Vector2( 709.212, 770.026 )
+
+[node name="Blob" parent="YSort" instance=ExtResource( 28 )]
+position = Vector2( 0, 808 )
 [connection signal="direction_change" from="UI/MovementJoystick" to="YSort/Player" method="_on_MovementJoystick_direction_change"]
 [connection signal="direction_change" from="UI/AttackJoystick" to="YSort/Player" method="_on_AttackJoystick_direction_change"]
-[connection signal="stick_pressed" from="UI/AttackJoystick" to="UI/SpecialJoystick" method="_on_Neighbor_Joystick_stick_pressed"]
 [connection signal="stick_pressed" from="UI/AttackJoystick" to="YSort/Player" method="_on_AttackJoystick_stick_pressed"]
-[connection signal="stick_released" from="UI/AttackJoystick" to="UI/SpecialJoystick" method="_on_Neighbor_Joystick_stick_released"]
 [connection signal="stick_released" from="UI/AttackJoystick" to="YSort/Player" method="_on_AttackJoystick_stick_released"]
-[connection signal="direction_change" from="UI/SpecialJoystick" to="YSort/Player" method="_on_SpecialJoystick_direction_change"]
-[connection signal="stick_pressed" from="UI/SpecialJoystick" to="UI/AttackJoystick" method="_on_Neighbor_Joystick_stick_pressed"]
-[connection signal="stick_pressed" from="UI/SpecialJoystick" to="YSort/Player" method="_on_SpecialJoystick_stick_pressed"]
-[connection signal="stick_released" from="UI/SpecialJoystick" to="UI/AttackJoystick" method="_on_Neighbor_Joystick_stick_released"]
-[connection signal="stick_released" from="UI/SpecialJoystick" to="YSort/Player" method="_on_SpecialJoystick_stick_released"]
