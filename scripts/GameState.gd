@@ -7,7 +7,6 @@ var camera: Camera2D = null
 var screen_width: float
 var screen_height: float
 var is_mobile: bool = true
-var blobs: Array = []
 
 func _init():
 	randomize();

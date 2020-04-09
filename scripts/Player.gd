@@ -27,6 +27,7 @@ var _attack_direction: Vector2 = Vector2.ZERO
 var _attack_pressed: bool = false
 
 var _is_dashing: bool = false
+var paralysed: bool = false
 var _elapsed_time: float = 0.0
 
 func hit(damage: int, force: Vector2 = Vector2.ZERO):
@@ -45,6 +46,8 @@ func _ready() -> void:
 	add_child(_attack_area)
 
 func _physics_process(delta: float) -> void:
+	if paralysed: return
+	
 	_velocity = move_and_slide(_velocity + _hit_force)
 	_hit_force = _hit_force * 0.8
 	if _hit_force.length() < 10: _hit_force = Vector2.ZERO

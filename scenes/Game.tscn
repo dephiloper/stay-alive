@@ -1,7 +1,8 @@
-[gd_scene load_steps=55 format=2]
+[gd_scene load_steps=56 format=2]
 
 [ext_resource path="res://scenes/Joystick.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/Reaper.tscn" type="PackedScene" id=3]
 [ext_resource path="res://img/water/water24.png" type="Texture" id=4]
 [ext_resource path="res://img/water/water18.png" type="Texture" id=5]
 [ext_resource path="res://img/water/water19.png" type="Texture" id=6]
@@ -26,7 +27,7 @@
 [ext_resource path="res://img/water/water04.png" type="Texture" id=25]
 [ext_resource path="res://img/buttons/attack.png" type="Texture" id=26]
 [ext_resource path="res://img/water/water00.png" type="Texture" id=27]
-[ext_resource path="res://scenes/Blob.tscn" type="PackedScene" id=28]
+[ext_resource path="res://scenes/Slime.tscn" type="PackedScene" id=28]
 [ext_resource path="res://scenes/Camera.tscn" type="PackedScene" id=29]
 [ext_resource path="res://img/water/water12.png" type="Texture" id=35]
 [ext_resource path="res://img/water/water03.png" type="Texture" id=36]
@@ -653,8 +654,11 @@ position = Vector2( 162.338, 334.703 )
 [node name="Rock10" parent="YSort" instance=ExtResource( 14 )]
 position = Vector2( 709.212, 770.026 )
 
-[node name="Blob" parent="YSort" instance=ExtResource( 28 )]
-position = Vector2( 0, 808 )
+[node name="Reaper" parent="YSort" instance=ExtResource( 3 )]
+position = Vector2( 0, 416 )
+
+[node name="Slime" parent="YSort" instance=ExtResource( 28 )]
+position = Vector2( 146.018, 851.307 )
 [connection signal="direction_change" from="UI/MovementJoystick" to="YSort/Player" method="_on_MovementJoystick_direction_change"]
 [connection signal="direction_change" from="UI/AttackJoystick" to="YSort/Player" method="_on_AttackJoystick_direction_change"]
 [connection signal="stick_pressed" from="UI/AttackJoystick" to="YSort/Player" method="_on_AttackJoystick_stick_pressed"]
