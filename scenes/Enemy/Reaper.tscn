@@ -1,0 +1,115 @@
+[gd_scene load_steps=29 format=2]
+
+[ext_resource path="res://img/enemies/reaper/reaper_hand8.png" type="Texture" id=1]
+[ext_resource path="res://img/enemies/reaper/reaper5.png" type="Texture" id=2]
+[ext_resource path="res://scripts/Enemy/Reaper.gd" type="Script" id=3]
+[ext_resource path="res://scenes/UI/HealthSystem.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/UI/HealthBar.tscn" type="PackedScene" id=5]
+[ext_resource path="res://img/enemies/reaper/reaper3.png" type="Texture" id=6]
+[ext_resource path="res://img/enemies/reaper/reaper2.png" type="Texture" id=7]
+[ext_resource path="res://img/enemies/reaper/reaper10.png" type="Texture" id=8]
+[ext_resource path="res://img/enemies/reaper/reaper9.png" type="Texture" id=9]
+[ext_resource path="res://img/enemies/reaper/reaper1.png" type="Texture" id=10]
+[ext_resource path="res://img/enemies/reaper/reaper4.png" type="Texture" id=11]
+[ext_resource path="res://img/enemies/reaper/reaper8.png" type="Texture" id=12]
+[ext_resource path="res://img/enemies/reaper/reaper6.png" type="Texture" id=13]
+[ext_resource path="res://img/enemies/reaper/reaper7.png" type="Texture" id=14]
+[ext_resource path="res://img/enemies/reaper/reaper_hand10.png" type="Texture" id=15]
+[ext_resource path="res://img/enemies/reaper/reaper_hand2.png" type="Texture" id=16]
+[ext_resource path="res://img/enemies/reaper/reaper_hand3.png" type="Texture" id=17]
+[ext_resource path="res://img/enemies/reaper/reaper_hand6.png" type="Texture" id=18]
+[ext_resource path="res://img/enemies/reaper/reaper_hand5.png" type="Texture" id=19]
+[ext_resource path="res://img/enemies/reaper/reaper_hand7.png" type="Texture" id=20]
+[ext_resource path="res://img/enemies/reaper/reaper_hand4.png" type="Texture" id=21]
+[ext_resource path="res://img/enemies/reaper/reaper_hand1.png" type="Texture" id=22]
+[ext_resource path="res://img/enemies/reaper/reaper_hand9.png" type="Texture" id=23]
+
+
+[sub_resource type="CapsuleShape2D" id=1]
+radius = 11.5865
+height = 59.2709
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 7.34106
+height = 25.5817
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ ExtResource( 22 ), ExtResource( 16 ), ExtResource( 17 ), ExtResource( 21 ), ExtResource( 19 ), ExtResource( 18 ), ExtResource( 20 ), ExtResource( 1 ), ExtResource( 23 ), ExtResource( 15 ) ],
+"loop": true,
+"name": "idle",
+"speed": 8.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 8.78153, 8.98353 )
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ ExtResource( 10 ), ExtResource( 7 ), ExtResource( 6 ), ExtResource( 11 ), ExtResource( 2 ), ExtResource( 13 ), ExtResource( 14 ), ExtResource( 12 ), ExtResource( 9 ), ExtResource( 8 ) ],
+"loop": true,
+"name": "idle",
+"speed": 8.0
+} ]
+
+[node name="Reaper" type="KinematicBody2D"]
+collision_layer = 2
+collision_mask = 12
+script = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, -5 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+position = Vector2( -20, 2 )
+shape = SubResource( 2 )
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="."]
+position = Vector2( 19, 2 )
+shape = SubResource( 2 )
+
+[node name="Hook" type="Area2D" parent="."]
+position = Vector2( -25, 26 )
+collision_layer = 0
+
+[node name="Sprite" type="AnimatedSprite" parent="Hook"]
+scale = Vector2( 0.75, 0.75 )
+z_index = 1
+frames = SubResource( 3 )
+animation = "idle"
+
+[node name="CollisionPolygon2D" type="CollisionShape2D" parent="Hook"]
+position = Vector2( -2, 0 )
+shape = SubResource( 4 )
+
+[node name="HealthSystem" parent="." instance=ExtResource( 4 )]
+
+[node name="UI" type="Node2D" parent="."]
+position = Vector2( 0, -16 )
+
+[node name="HealthBar" parent="UI" instance=ExtResource( 5 )]
+margin_top = -50.0
+margin_right = 56.0
+margin_bottom = -30.0
+rect_scale = Vector2( 0.5, 0.5 )
+
+[node name="Label" type="Label" parent="UI"]
+margin_left = -36.0
+margin_top = -85.0
+margin_right = 38.0
+margin_bottom = -60.0
+text = "charge"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 0.75, 0.75 )
+frames = SubResource( 5 )
+animation = "idle"
+[connection signal="body_entered" from="Hook" to="." method="_on_Hook_body_entered"]
+[connection signal="dead" from="HealthSystem" to="." method="_on_HealthSystem_dead"]
+[connection signal="health_updated" from="HealthSystem" to="UI/HealthBar" method="_on_HealthSystem_health_updated"]

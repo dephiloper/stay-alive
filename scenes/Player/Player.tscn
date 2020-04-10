@@ -1,0 +1,141 @@
+[gd_scene load_steps=41 format=2]
+
+[ext_resource path="res://img/demon/walk/demon_walk1.png" type="Texture" id=1]
+[ext_resource path="res://scripts/Player/Player.gd" type="Script" id=2]
+[ext_resource path="res://img/demon/walk/demon_walk2.png" type="Texture" id=3]
+[ext_resource path="res://img/demon/walk/demon_walk4.png" type="Texture" id=4]
+[ext_resource path="res://img/demon/walk/demon_walk3.png" type="Texture" id=5]
+[ext_resource path="res://img/demon/walk/demon_walk5.png" type="Texture" id=6]
+[ext_resource path="res://img/demon/walk/demon_walk6.png" type="Texture" id=7]
+[ext_resource path="res://img/demon/walk/demon_walk8.png" type="Texture" id=8]
+[ext_resource path="res://img/demon/walk/demon_walk7.png" type="Texture" id=9]
+[ext_resource path="res://img/demon/walk/demon_walk9.png" type="Texture" id=10]
+[ext_resource path="res://img/demon/walk/demon_walk10.png" type="Texture" id=11]
+[ext_resource path="res://img/demon/walk/demon_walk11.png" type="Texture" id=12]
+[ext_resource path="res://img/demon/walk/demon_walk12.png" type="Texture" id=13]
+[ext_resource path="res://img/demon/idle/demon_idle1.png" type="Texture" id=14]
+[ext_resource path="res://img/demon/idle/demon_idle3.png" type="Texture" id=15]
+[ext_resource path="res://img/demon/idle/demon_idle2.png" type="Texture" id=16]
+[ext_resource path="res://img/demon/idle/demon_idle4.png" type="Texture" id=17]
+[ext_resource path="res://img/demon/idle/demon_idle5.png" type="Texture" id=18]
+[ext_resource path="res://img/demon/idle/demon_idle6.png" type="Texture" id=19]
+[ext_resource path="res://img/demon/idle/demon_idle7.png" type="Texture" id=20]
+[ext_resource path="res://img/demon/idle/demon_idle8.png" type="Texture" id=21]
+[ext_resource path="res://img/demon/idle/demon_idle9.png" type="Texture" id=22]
+[ext_resource path="res://img/demon/idle/demon_idle11.png" type="Texture" id=23]
+[ext_resource path="res://img/demon/idle/demon_idle10.png" type="Texture" id=24]
+[ext_resource path="res://img/demon/idle/demon_idle12.png" type="Texture" id=25]
+[ext_resource path="res://scenes/UI/HealthSystem.tscn" type="PackedScene" id=26]
+[ext_resource path="res://scenes/Player/RangeAttackArea.tscn" type="PackedScene" id=27]
+[ext_resource path="res://img/attacks/fire-attack/fire-attack3.png" type="Texture" id=28]
+[ext_resource path="res://scenes/Player/FireAttack.tscn" type="PackedScene" id=29]
+[ext_resource path="res://scenes/UI/HealthBar.tscn" type="PackedScene" id=32]
+[ext_resource path="res://scenes/UI/StaminaBar.tscn" type="PackedScene" id=33]
+[ext_resource path="res://img/stamina_bar/border.png" type="Texture" id=34]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 13.9801
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 20.1102
+height = 35.5683
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ ExtResource( 14 ), ExtResource( 16 ), ExtResource( 15 ), ExtResource( 17 ), ExtResource( 18 ), ExtResource( 19 ), ExtResource( 20 ), ExtResource( 21 ), ExtResource( 22 ), ExtResource( 24 ), ExtResource( 23 ), ExtResource( 25 ) ],
+"loop": true,
+"name": "idle",
+"speed": 8.0
+}, {
+"frames": [ ExtResource( 1 ), ExtResource( 3 ), ExtResource( 5 ), ExtResource( 4 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 9 ), ExtResource( 8 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 13 ) ],
+"loop": true,
+"name": "walk",
+"speed": 11.0
+} ]
+
+[sub_resource type="Gradient" id=4]
+colors = PoolColorArray( 1, 1, 1, 0.501961, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=5]
+gradient = SubResource( 4 )
+
+[sub_resource type="Curve" id=6]
+_data = [ Vector2( 0, 0.790909 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.590909 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=7]
+curve = SubResource( 6 )
+
+[sub_resource type="ParticlesMaterial" id=8]
+flag_disable_z = true
+gravity = Vector3( 0, 0, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale_curve = SubResource( 7 )
+color_ramp = SubResource( 5 )
+
+[node name="Player" type="KinematicBody2D"]
+collision_mask = 4
+script = ExtResource( 2 )
+attack_area_scene = ExtResource( 27 )
+attack_scene = ExtResource( 29 )
+attack_texture = ExtResource( 28 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 1
+shape = SubResource( 1 )
+
+[node name="CoverArea2D" type="Area2D" parent="."]
+collision_mask = 32
+
+[node name="CoverCollisionShape2D" type="CollisionShape2D" parent="CoverArea2D"]
+position = Vector2( 0, -19 )
+shape = SubResource( 2 )
+
+[node name="HealthSystem" parent="." instance=ExtResource( 26 )]
+
+[node name="UI" type="Node2D" parent="."]
+
+[node name="HealthBar" parent="UI" instance=ExtResource( 32 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = -86.0
+margin_right = 56.0
+margin_bottom = -66.0
+rect_scale = Vector2( 0.6, 0.6 )
+
+[node name="StaminaBar" parent="UI" instance=ExtResource( 33 )]
+margin_left = -50.0
+margin_top = -71.0
+margin_right = 50.0
+margin_bottom = -55.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_scale = Vector2( 0.6, 0.6 )
+rect_pivot_offset = Vector2( 50, 8 )
+value = 33.0
+texture_over = ExtResource( 34 )
+tint_progress = Color( 0.0537262, 0.416498, 0.982422, 0.501961 )
+
+[node name="Sprite" type="AnimatedSprite" parent="."]
+position = Vector2( 0, -20 )
+scale = Vector2( 0.8, 0.8 )
+frames = SubResource( 3 )
+animation = "idle"
+
+[node name="StaminaTimer" type="Timer" parent="."]
+wait_time = 1.5
+one_shot = true
+
+[node name="Particles2D" type="Particles2D" parent="."]
+position = Vector2( 0, -20 )
+emitting = false
+lifetime = 0.3
+local_coords = false
+process_material = SubResource( 8 )
+texture = ExtResource( 1 )
+__meta__ = {
+"_editor_description_": ""
+}
+[connection signal="dead" from="HealthSystem" to="." method="_on_HealthSystem_dead"]
+[connection signal="health_updated" from="HealthSystem" to="UI/HealthBar" method="_on_HealthSystem_health_updated"]
+[connection signal="timeout" from="StaminaTimer" to="." method="_on_StaminaTimer_timeout"]

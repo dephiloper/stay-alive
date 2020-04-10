@@ -3,6 +3,7 @@ extends Node2D
 const DEFAULT_RESOLUTION: Vector2 = Vector2(1024, 576)
 
 var player: PhysicsBody2D = null
+var obstacles: Array = []
 var camera: Camera2D = null
 var screen_width: float
 var screen_height: float
