@@ -48,7 +48,5 @@ func _reset_position() -> void:
 func _emulate_touch() -> void:
 	if Input.is_action_just_pressed("dash"):
 		emit_signal("pressed")
-		print("pressed")
 	if Input.is_action_just_released("dash"):
 		emit_signal("released")
-		print("released")

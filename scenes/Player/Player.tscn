@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://img/demon/walk/demon_walk1.png" type="Texture" id=1]
 [ext_resource path="res://scripts/Player/Player.gd" type="Script" id=2]
@@ -29,6 +29,7 @@
 [ext_resource path="res://scenes/Player/RangeAttackArea.tscn" type="PackedScene" id=27]
 [ext_resource path="res://img/attacks/fire-attack/fire-attack3.png" type="Texture" id=28]
 [ext_resource path="res://scenes/Player/FireAttack.tscn" type="PackedScene" id=29]
+[ext_resource path="res://scenes/Fire.tscn" type="PackedScene" id=30]
 [ext_resource path="res://scenes/UI/HealthBar.tscn" type="PackedScene" id=32]
 [ext_resource path="res://scenes/UI/StaminaBar.tscn" type="PackedScene" id=33]
 [ext_resource path="res://img/stamina_bar/border.png" type="Texture" id=34]
@@ -116,11 +117,18 @@ value = 33.0
 texture_over = ExtResource( 34 )
 tint_progress = Color( 0.0537262, 0.416498, 0.982422, 0.501961 )
 
+[node name="FireEffect" parent="." instance=ExtResource( 30 )]
+margin_left = -25.0
+margin_top = -59.0
+margin_right = 23.0
+margin_bottom = -17.0
+
 [node name="Sprite" type="AnimatedSprite" parent="."]
 position = Vector2( 0, -20 )
 scale = Vector2( 0.8, 0.8 )
 frames = SubResource( 3 )
 animation = "idle"
+frame = 9
 
 [node name="StaminaTimer" type="Timer" parent="."]
 wait_time = 1.5

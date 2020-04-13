@@ -93,7 +93,6 @@ func _physics_process(delta) -> void:
 	
 	_velocity = move_and_slide(_velocity)
 	_change_look_direction()
-	print(_aggro_time)
 
 func _player_in_range(distance: int) -> bool:
 	return position.distance_to(GameState.player.position) < distance

@@ -32,6 +32,9 @@ var _is_dashing: bool = false
 var is_paralysed: bool = false
 var _elapsed_time: float = 0.0
 
+var _initial_fire_y: float
+var _fire_distortion: float = 0.0
+
 func hit(damage: int, force: Vector2 = Vector2.ZERO):
 	_hit_force = force
 	$HealthSystem.damage_taken(damage)
@@ -41,11 +44,35 @@ func _init() -> void:
 	add_to_group("Player")
 
 func _ready() -> void:
+	_initial_fire_y = $FireEffect.get_rect().position.y
 	$Sprite.play("idle")
 	_change_stamina(_stamina)
 	$HealthSystem.setup(MAX_HEALTH)
 	_attack_area = attack_area_scene.instance()
 	add_child(_attack_area)
+
+func _process(delta) -> void:
+	if $Sprite.frame < 2 or $Sprite.frame > 9:
+		$FireEffect.rect_position.y = _initial_fire_y + 1
+	elif $Sprite.frame < 3 or $Sprite.frame > 8:
+		$FireEffect.rect_position.y = _initial_fire_y + 2
+	elif $Sprite.frame < 4 or $Sprite.frame > 7:
+		$FireEffect.rect_position.y = _initial_fire_y + 3
+	elif $Sprite.frame < 6:
+		$FireEffect.rect_position.y = _initial_fire_y + 4
+	
+	
+	if move_direction.x > 0:
+		_fire_distortion = min(1.0, _fire_distortion + 4.0 * delta)
+	elif move_direction.x < 0:
+		_fire_distortion = max(-1.0, _fire_distortion - 4.0 * delta)
+	elif _fire_distortion > 0:
+		_fire_distortion = max(0.0, _fire_distortion - 4.0 * delta)
+	else:
+		_fire_distortion = min(0.0, _fire_distortion + 4.0 * delta)
+		 
+	$FireEffect.get_material().set_shader_param("x_offset", _fire_distortion)
+	print(_fire_distortion)
 
 func _physics_process(delta: float) -> void:
 	if is_paralysed: return

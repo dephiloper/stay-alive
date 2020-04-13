@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://shader/fire.shader" type="Shader" id=1]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 1 )
+shader_param/layer0 = Color( 0.494118, 0.117647, 0.0862745, 1 )
+shader_param/layer1 = Color( 0.67451, 0.196078, 0.196078, 1 )
+shader_param/layer2 = Color( 0.87451, 0.443137, 0.14902, 1 )
+shader_param/layer3 = Color( 0.984314, 0.94902, 0.211765, 1 )
+shader_param/OCTAVES = 6
+shader_param/center = Vector2( 0.5, 0.8 )
+shader_param/outer_threshold = 0.04
+shader_param/layer0_threshold = 0.1
+shader_param/layer1_threshold = 0.3
+shader_param/layer2_threshold = 0.2
+shader_param/x_offset = 0.0
+shader_param/pixelated_amount = 20
+
+[node name="ColorRect" type="ColorRect"]
+material = SubResource( 1 )
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
