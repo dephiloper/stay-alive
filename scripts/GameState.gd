@@ -20,7 +20,8 @@ func _ready() -> void:
 	var zoom_x = DEFAULT_RESOLUTION.x / screen_width
 	var zoom_y = DEFAULT_RESOLUTION.y / screen_height
 	var zoom = (zoom_x + zoom_y) / 2
-	camera.zoom = Vector2(zoom, zoom)
+	if camera:
+		camera.zoom = Vector2(zoom, zoom)
 
 func register_player(_player: PhysicsBody2D) -> void:
 	player = _player

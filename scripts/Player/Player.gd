@@ -44,7 +44,7 @@ func _init() -> void:
 	add_to_group("Player")
 
 func _ready() -> void:
-	_initial_fire_y = $FireEffect.get_rect().position.y
+	_initial_fire_y = $FireEffect.rect_position.y
 	$Sprite.play("idle")
 	_change_stamina(_stamina)
 	$HealthSystem.setup(MAX_HEALTH)

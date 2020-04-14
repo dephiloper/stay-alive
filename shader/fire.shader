@@ -14,6 +14,7 @@ uniform float layer2_threshold = 0.4;
 uniform float x_offset = 0.0;
 
 uniform float pixelated_amount = 20;
+uniform float opacity = 1.0;
 
 
 // https://godotengine.org/qa/40950/godot-3-0-3-1-how-to-make-a-random-number-in-shader
@@ -69,6 +70,12 @@ float overlay(float base, float top) {
 	return 1.0 - (2.0 * (1.0 - base) * (1.0 - top));
 }
 
+float cirlce_shape(vec2 coord, float radius) {
+	float dist = distance(coord, vec2(0.5, 0.5));
+	
+	return 1.0 - dist;
+}
+
 float egg_shape(vec2 coord, float radius){
 	vec2 diff = abs(coord - center);
 
@@ -77,18 +84,18 @@ float egg_shape(vec2 coord, float radius){
 	} else {
 		diff.y *= 2.0;
 	}
-
+	
 	float dist = sqrt(diff.x * diff.x + diff.y * diff.y) / radius;
+	dist = min(1.0, max(0.0, dist));
 	float value = sqrt(1.0 - dist * dist);
 	return clamp(value, 0.0, 1.0);
 }
 
 void fragment() {
-	//vec2 distortion = vec2((floor(1.0 - UV.y) * 1.0 / float(pixelated_amount)), 0.0); //vec2(floor(x_offset * (1.0 - UV.y) * float(pixelated_amount)) / float(pixelated_amount), 0);
+	float time = TIME;
+	vec2 distortion = vec2((floor(1.0 - UV.y) / float(pixelated_amount)), 0.0);
 	vec2 uv = floor(UV * float(pixelated_amount)) / float(pixelated_amount);
-	uv.x += x_offset * floor((1.0 - uv.y) * 0.2 * pixelated_amount) * (1.0 / pixelated_amount);
-	//uv.x -= floor((1.0 - uv.y) * 0.25 * pixelated_amount) * (1.0 / pixelated_amount);
-	//vec2 uv = UV;
+	uv.x += x_offset * floor((1.0 - uv.y) * 0.9 * pixelated_amount * 0.5) * (1.0 / pixelated_amount * 0.5);
 	
 	vec2 coord = uv * 8.0;
 	vec2 fbmcoord = coord / 6.0;
@@ -96,16 +103,15 @@ void fragment() {
 	float egg_s = egg_shape(uv, 0.4);
 	egg_s += egg_shape(uv, 0.2) / 2.0;
 
-	float noise1 = noise(coord + vec2(TIME * 0.25, sin(TIME * 4.0)));
-	float noise2 = noise(coord + vec2(cos(TIME * 0.5), TIME * 7.0));
+	float noise1 = noise(coord + vec2(time * 0.25, sin(time * 4.0)));
+	float noise2 = noise(coord + vec2(cos(time * 0.5), time * 7.0));
 	float combined_noise = (noise1 + noise2) / 2.0;
-
-	float fbm_noise = fbm(fbmcoord + vec2(0.0, TIME * 3.0));
+	
+	float fbm_noise = fbm(fbmcoord + vec2(0.0, time * 3.0));
 	fbm_noise = overlay(fbm_noise, uv.y);
 
 	float combined = combined_noise * fbm_noise * egg_s;
-	COLOR = vec4(combined);
-	
+
 	if (combined > 0.4)
 		COLOR = layer3;
 	else if (combined > 0.17)
@@ -115,5 +121,7 @@ void fragment() {
 	else if (combined > 0.05) 
 		COLOR = layer0;
 	else
-		COLOR = vec4(vec3(0.0), 1.0);
+		COLOR = vec4(vec3(0.0), 0.0);
+		
+	COLOR.a *= opacity;
 }
