@@ -133,7 +133,7 @@ func _on_DamageArea_body_entered(body: PhysicsBody2D) -> void:
 		if hit_direction == Vector2.ZERO: hit_direction = Vector2.RIGHT 
 		body.hit(DAMAGE, hit_direction * KNOCKBACK_MULTIPLIER)
 
-func _change_state(state) -> void:
+func _change_state(state: int) -> void:
 	_state = state
 	_state_changed = true
 	_elapsed_time = 0

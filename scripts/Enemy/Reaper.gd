@@ -14,7 +14,7 @@ const KNOCKBACK_MULTIPLIER: int = 2000
 const HOOK_SPEED: int = 700
 const DRAG_SPEED: int = 200
 
-var _recently_hit: bool = false
+var _recently_hit: bool
 var _state = State.IDLE
 
 var _velocity: Vector2 = Vector2.ZERO

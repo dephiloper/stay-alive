@@ -1,4 +1,4 @@
-extends Node2D
+class_name MovementBehaviour
 
 const CIRCLE_DISTANCE: float = 20.0
 const CIRCLE_RADIUS: float = 50.0

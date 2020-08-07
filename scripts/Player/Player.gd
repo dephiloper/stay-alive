@@ -1,9 +1,7 @@
-extends KinematicBody2D
+class_name Player extends KinematicBody2D
 
 export(PackedScene) var attack_area_scene: PackedScene
 export(PackedScene) var attack_scene: PackedScene
-export(Texture) var attack_texture: Texture
-
 
 const MOVEMENT_SPEED: int = 100
 const DASH_SPEED: int = 600
@@ -70,9 +68,8 @@ func _process(delta) -> void:
 		_fire_distortion = max(0.0, _fire_distortion - 4.0 * delta)
 	else:
 		_fire_distortion = min(0.0, _fire_distortion + 4.0 * delta)
-		 
+	
 	$FireEffect.get_material().set_shader_param("x_offset", _fire_distortion)
-	print(_fire_distortion)
 
 func _physics_process(delta: float) -> void:
 	if is_paralysed: return
@@ -160,10 +157,10 @@ func _on_AttackJoystick_stick_released(dir) -> void:
 	if dir == Vector2.ZERO:
 		_is_dashing = true
 	else:
-		var attack = attack_scene.instance()
+		var attack: Node = attack_scene.instance()
 		attack.position = position + dir.normalized() * ATTACK_SPAWN_DISTANCE
 		attack.setup(dir.normalized())
 		$"/root/Game/YSort".add_child(attack)
 
 func _on_HealthSystem_dead() -> void:
-	get_tree().reload_current_scene()
+	var _err: int = get_tree().reload_current_scene()

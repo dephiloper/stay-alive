@@ -2,7 +2,7 @@ extends Particles2D
 
 const HIT_DIRECTION_OFFSET: int = 25
 
-func setup(pos: Vector2, dir: Vector2, colors: Array = []) -> void:
+func setup(pos: Vector2, dir: Vector2, _colors: Array = []) -> void:
 	emitting = true
 	one_shot = true
 	global_position = pos - dir * HIT_DIRECTION_OFFSET

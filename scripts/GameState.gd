@@ -2,12 +2,13 @@ extends Node2D
 
 const DEFAULT_RESOLUTION: Vector2 = Vector2(1024, 576)
 
-var player: PhysicsBody2D = null
+var player: Player
 var obstacles: Array = []
-var camera: Camera2D = null
+var camera: Camera2D
 var screen_width: float
 var screen_height: float
 var is_mobile: bool = true
+var global_ysort: YSort
 
 func _init():
 	randomize();
@@ -24,7 +25,13 @@ func _ready() -> void:
 		camera.zoom = Vector2(zoom, zoom)
 
 func register_player(_player: PhysicsBody2D) -> void:
-	player = _player
+	self.player = _player
 	
+func register_obstacle(obstacle: PhysicsBody2D) -> void:
+	self.obstacles.append(obstacle)
+
 func register_camera(_camera: Camera2D) -> void:
-	camera = _camera
+	self.camera = _camera
+
+func set_global_ysort(ysort: YSort) -> void:
+	self.global_ysort = ysort

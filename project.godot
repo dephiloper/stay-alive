@@ -8,20 +8,56 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Node",
+"class": "BaseState",
+"language": "GDScript",
+"path": "res://scripts/StateMachine/BaseState.gd"
+}, {
+"base": "KinematicBody2D",
+"class": "Creep",
+"language": "GDScript",
+"path": "res://scripts/Enemy/Creep.gd"
+}, {
+"base": "KinematicBody2D",
+"class": "CreepAttack",
+"language": "GDScript",
+"path": "res://scripts/RangeAttack.gd"
+}, {
+"base": "Reference",
+"class": "MovementBehaviour",
+"language": "GDScript",
+"path": "res://scripts/Helper/MovementBehavior.gd"
+}, {
+"base": "KinematicBody2D",
+"class": "Player",
+"language": "GDScript",
+"path": "res://scripts/Player/Player.gd"
+} ]
 _global_script_class_icons={
-
+"BaseState": "",
+"Creep": "",
+"CreepAttack": "",
+"MovementBehaviour": "",
+"Player": ""
 }
 
 [application]
 
-config/name="stay-alive"
+config/name="Duemonic"
 run/main_scene="res://scenes/Game.tscn"
 config/icon="res://img/launcher.png"
 
 [autoload]
 
 GameState="*res://scripts/GameState.gd"
+
+[debug]
+
+gdscript/completion/autocomplete_setters_and_getters=true
+gdscript/warnings/unused_class_variable=true
+gdscript/warnings/unsafe_cast=true
+gdscript/warnings/unsafe_call_argument=true
 
 [display]
 

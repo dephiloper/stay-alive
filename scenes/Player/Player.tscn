@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=41 format=2]
 
 [ext_resource path="res://img/demon/walk/demon_walk1.png" type="Texture" id=1]
 [ext_resource path="res://scripts/Player/Player.gd" type="Script" id=2]
@@ -27,7 +27,6 @@
 [ext_resource path="res://img/demon/idle/demon_idle12.png" type="Texture" id=25]
 [ext_resource path="res://scenes/UI/HealthSystem.tscn" type="PackedScene" id=26]
 [ext_resource path="res://scenes/Player/RangeAttackArea.tscn" type="PackedScene" id=27]
-[ext_resource path="res://img/attacks/fire-attack/fire-attack3.png" type="Texture" id=28]
 [ext_resource path="res://scenes/Player/FireAttack.tscn" type="PackedScene" id=29]
 [ext_resource path="res://scenes/Fire.tscn" type="PackedScene" id=30]
 [ext_resource path="res://scenes/UI/HealthBar.tscn" type="PackedScene" id=32]
@@ -79,7 +78,6 @@ collision_mask = 4
 script = ExtResource( 2 )
 attack_area_scene = ExtResource( 27 )
 attack_scene = ExtResource( 29 )
-attack_texture = ExtResource( 28 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_index = 1

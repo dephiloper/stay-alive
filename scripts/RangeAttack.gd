@@ -1,4 +1,4 @@
-extends KinematicBody2D
+class_name CreepAttack extends KinematicBody2D
 
 const DAMAGE: int = 20
 const KNOCKBACK_MULTIPLIER: int = 500
