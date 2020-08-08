@@ -1,4 +1,4 @@
-extends Node2D
+class_name HealthSystem extends Node2D
 
 signal health_updated(health, initial)
 signal dead()

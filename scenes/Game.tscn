@@ -589,9 +589,6 @@ script = ExtResource( 13 )
 [node name="Player" parent="YSort" instance=ExtResource( 2 )]
 position = Vector2( 510.586, 282.975 )
 
-[node name="Creep" parent="YSort" instance=ExtResource( 3 )]
-position = Vector2( 96, 616 )
-
 [node name="Tree" parent="YSort" instance=ExtResource( 12 )]
 position = Vector2( 119, 520 )
 
@@ -609,6 +606,9 @@ position = Vector2( -49.4219, 728.311 )
 
 [node name="Tree6" parent="YSort" instance=ExtResource( 12 )]
 position = Vector2( -61.6104, 534.405 )
+
+[node name="Creep" parent="YSort" instance=ExtResource( 3 )]
+position = Vector2( 32, 320 )
 [connection signal="direction_change" from="UI/MovementJoystick" to="YSort/Player" method="_on_MovementJoystick_direction_change"]
 [connection signal="direction_change" from="UI/AttackJoystick" to="YSort/Player" method="_on_AttackJoystick_direction_change"]
 [connection signal="stick_pressed" from="UI/AttackJoystick" to="YSort/Player" method="_on_AttackJoystick_stick_pressed"]

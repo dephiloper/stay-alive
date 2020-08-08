@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[sub_resource type="Shader" id=9]
+[sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
 
 uniform vec4 layer0: hint_color;
@@ -128,9 +128,10 @@ void fragment() {
 		
 	COLOR.a *= opacity;
 }"
+custom_defines = ""
 
-[sub_resource type="ShaderMaterial" id=10]
-shader = SubResource( 9 )
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
 shader_param/layer0 = Color( 0.494118, 0.117647, 0.0862745, 1 )
 shader_param/layer1 = Color( 0.67451, 0.196078, 0.196078, 1 )
 shader_param/layer2 = Color( 0.87451, 0.443137, 0.14902, 1 )
@@ -146,7 +147,7 @@ shader_param/pixelated_amount = 20.0
 shader_param/opacity = 1.0
 
 [node name="ColorRect" type="ColorRect"]
-material = SubResource( 10 )
+material = SubResource( 2 )
 margin_left = -22.0
 margin_top = -22.0
 margin_right = 22.0

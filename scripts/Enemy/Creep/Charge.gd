@@ -1,7 +1,5 @@
 extends BaseState
 
-const CHARGE_DURATION: float = 0.3
-
 var _creep: Creep
 
 func init(root: Node) -> BaseState:
@@ -16,7 +14,7 @@ func process(delta: float) -> String:
 	var state := .process(delta)
 	_creep.velocity *= 0.9
 	
-	if state_time >= CHARGE_DURATION:
+	if state_time >= _creep.CHARGE_DURATION:
 		state = "attack"
 	
 	return state

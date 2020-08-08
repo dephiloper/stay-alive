@@ -24,7 +24,6 @@
 [ext_resource path="res://img/enemies/reaper/reaper_hand1.png" type="Texture" id=22]
 [ext_resource path="res://img/enemies/reaper/reaper_hand9.png" type="Texture" id=23]
 
-
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 11.5865
 height = 59.2709

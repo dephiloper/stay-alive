@@ -9,20 +9,50 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "KinematicBody2D",
+"class": "BaseEnemy",
+"language": "GDScript",
+"path": "res://scripts/Enemy/BaseEnemy.gd"
+}, {
 "base": "Node",
 "class": "BaseState",
 "language": "GDScript",
 "path": "res://scripts/StateMachine/BaseState.gd"
 }, {
-"base": "KinematicBody2D",
+"base": "BaseState",
+"class": "Charge",
+"language": "GDScript",
+"path": "res://scripts/Enemy/Slime/Charge.gd"
+}, {
+"base": "BaseEnemy",
 "class": "Creep",
 "language": "GDScript",
-"path": "res://scripts/Enemy/Creep.gd"
+"path": "res://scripts/Enemy/Creep/Creep.gd"
 }, {
 "base": "KinematicBody2D",
 "class": "CreepAttack",
 "language": "GDScript",
 "path": "res://scripts/RangeAttack.gd"
+}, {
+"base": "Node2D",
+"class": "HealthSystem",
+"language": "GDScript",
+"path": "res://scripts/UI/HealthSystem.gd"
+}, {
+"base": "BaseState",
+"class": "Idle",
+"language": "GDScript",
+"path": "res://scripts/Enemy/Slime/Idle.gd"
+}, {
+"base": "BaseState",
+"class": "Jump",
+"language": "GDScript",
+"path": "res://scripts/Enemy/Slime/Jump.gd"
+}, {
+"base": "BaseState",
+"class": "Land",
+"language": "GDScript",
+"path": "res://scripts/Enemy/Slime/Land.gd"
 }, {
 "base": "Reference",
 "class": "MovementBehaviour",
@@ -33,13 +63,25 @@ _global_script_classes=[ {
 "class": "Player",
 "language": "GDScript",
 "path": "res://scripts/Player/Player.gd"
+}, {
+"base": "BaseEnemy",
+"class": "Slime",
+"language": "GDScript",
+"path": "res://scripts/Enemy/Slime/Slime.gd"
 } ]
 _global_script_class_icons={
+"BaseEnemy": "",
 "BaseState": "",
+"Charge": "",
 "Creep": "",
 "CreepAttack": "",
+"HealthSystem": "",
+"Idle": "",
+"Jump": "",
+"Land": "",
 "MovementBehaviour": "",
-"Player": ""
+"Player": "",
+"Slime": ""
 }
 
 [application]
@@ -55,7 +97,8 @@ GameState="*res://scripts/GameState.gd"
 [debug]
 
 gdscript/completion/autocomplete_setters_and_getters=true
-gdscript/warnings/unused_class_variable=true
+gdscript/warnings/unused_variable=false
+gdscript/warnings/return_value_discarded=false
 gdscript/warnings/unsafe_cast=true
 gdscript/warnings/unsafe_call_argument=true
 

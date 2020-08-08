@@ -2,7 +2,6 @@ extends BaseState
 
 const creep_attack_scene := preload("res://scenes/Enemy/CreepAttack.tscn")
 
-const ATTACK_DURATION: float = 0.5
 const ATTACK_SPAWN_DISTANCE := 20
 
 var _creep: Creep
@@ -23,7 +22,7 @@ func process(delta: float) -> String:
 	var state := .process(delta)
 	_creep.velocity *= 0.9
 	
-	if state_time >= ATTACK_DURATION:
+	if state_time >= _creep.ATTACK_DURATION:
 		state = "idle"
 	
 	return state

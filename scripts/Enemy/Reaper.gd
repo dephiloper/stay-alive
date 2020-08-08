@@ -42,7 +42,7 @@ func _physics_process(delta) -> void:
 	match _state:
 		State.IDLE:
 			_idle()
-			if _player_in_range() or _recently_hit:
+			if GameState.player_in_range(position, 200) or _recently_hit:
 				_change_state(State.CHARGE)
 				
 		State.CHARGE:
@@ -75,9 +75,6 @@ func _physics_process(delta) -> void:
 func _draw() -> void:
 	if _state != State.IDLE:
 		draw_line(Vector2(-25, 20), $Hook.position, Color("#222034"), 7.0)
-
-func _player_in_range() -> bool:
-	return position.distance_to(GameState.player.position) < 200
 
 func _idle() -> void:
 	if _state_changed:

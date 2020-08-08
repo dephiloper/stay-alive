@@ -1,9 +1,14 @@
-class_name Creep extends KinematicBody2D
+class_name Creep extends BaseEnemy
 
 const MAX_HEALTH := 50.0
 const DAMAGE := 20
 
-onready var states_map = {
+const FOLLOW_DURATION: float = 2.0
+const DASH_DURATION: float = 0.12
+const CHARGE_DURATION: float = 0.3
+const ATTACK_DURATION: float = 0.5
+
+onready var _states_map = {
 	'idle': $States/Idle.init(self),
 	'follow': $States/Follow.init(self),
 	'dash': $States/Dash.init(self),
@@ -12,18 +17,14 @@ onready var states_map = {
 }
 
 var _state := 'idle'
-var velocity := Vector2.ZERO
-var aggro_time := 0.0
-var spawn_point := Vector2.ZERO
 
 onready var label := $Label as Label
-onready var sprite := $Sprite as AnimatedSprite
 onready var trail := $TrailEffect as Particles2D
 
-func hit(damage: int, force: Vector2 = Vector2.ZERO) -> void:
-	$HealthSystem.damage_taken(damage)
+func hit(damage: float, knockback := Vector2.ZERO) -> void:
+	.hit(damage, knockback)
 	aggro_time = 5.0
-	velocity += force
+	velocity += knockback
 	if _state == 'idle':
 		_change_state('follow')
 
@@ -31,31 +32,22 @@ func _init() -> void:
 	add_to_group("Enemy")
 	
 func _ready() -> void:
-	$HealthSystem.setup(MAX_HEALTH)
-	$Sprite.play("idle")
+	health_system.setup(MAX_HEALTH)
+	sprite.play("idle")
 	_change_state(_state)
 	spawn_point = position
 
 func _physics_process(delta) -> void:
-	var state_name = states_map[_state].process(delta)
+	var state_name = _states_map[_state].process(delta)
 	if state_name != "":
 		_change_state(state_name)
 
 	velocity = move_and_slide(velocity)
-	_change_look_direction()
+	.change_look_direction()
 	aggro_time = max(aggro_time - delta, 0.0)
 	
 func _change_state(new_state: String) -> void:
-	states_map[_state].leave()
+	_states_map[_state].leave()
 	_state = new_state
-	states_map[_state].enter()
+	_states_map[_state].enter()
 	label.text = _state
-
-func _change_look_direction() -> void:
-	if velocity.normalized().x > 0.3:
-		$Sprite.flip_h = true
-	elif velocity.normalized().x < -0.3:
-		$Sprite.flip_h = false
-
-func _on_HealthSystem_dead():
-	queue_free()

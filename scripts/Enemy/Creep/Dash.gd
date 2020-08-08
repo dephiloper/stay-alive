@@ -1,6 +1,5 @@
 extends BaseState
 
-const DASH_DURATION: float = 0.12
 const DASH_SPEED: int = 400
 var _creep: Creep
 var _dash_direction := Vector2.ZERO
@@ -24,7 +23,7 @@ func process(delta: float) -> String:
 	var state := .process(delta)
 	_creep.velocity = _dash_direction * DASH_SPEED
 	
-	if state_time >= DASH_DURATION:
+	if state_time >= _creep.DASH_DURATION:
 		state = "charge"
 	
 	return state

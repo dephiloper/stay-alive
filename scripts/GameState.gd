@@ -35,3 +35,6 @@ func register_camera(_camera: Camera2D) -> void:
 
 func set_global_ysort(ysort: YSort) -> void:
 	self.global_ysort = ysort
+	
+func player_in_range(pos: Vector2, radius: float) -> bool:
+	return pos.distance_to(GameState.player.position) < radius
