@@ -35,8 +35,8 @@ func collision_avoidance(position: Vector2, velocity: Vector2, max_velocity: flo
 	var closest_obstacle: PhysicsBody2D = _find_closest_obstacle(position, ahead, ahead2)
 
 	if closest_obstacle != null:
-		avoidance.x = ahead.x - closest_obstacle.position.x;
-		avoidance.y = ahead.y - closest_obstacle.position.y;
+		avoidance.x = ahead.x - closest_obstacle.position.x
+		avoidance.y = ahead.y - closest_obstacle.position.y
 		avoidance = avoidance.normalized() * MAX_AVOID_FORCE
 	else:
 		avoidance = Vector2.ZERO
@@ -47,7 +47,7 @@ func _find_closest_obstacle(position: Vector2, ahead: Vector2, ahead2: Vector2) 
 	var closest: PhysicsBody2D = null
 	
 	for obstacle in GameState.obstacles:
-		var collision: bool = _line_intersects_circle(ahead, ahead2, obstacle);
+		var collision: bool = _line_intersects_circle(ahead, ahead2, obstacle)
 		if collision && (closest == null || position.distance_to(obstacle.position) < position.distance_to(closest.position)):
 			closest = obstacle
 	

@@ -11,7 +11,7 @@ var is_mobile: bool = true
 var global_ysort: YSort
 
 func _init():
-	randomize();
+	randomize()
 	is_mobile = OS.get_name() == "Android" or OS.get_name() == "iOS"
 	#is_mobile = true
 	
@@ -38,3 +38,6 @@ func set_global_ysort(ysort: YSort) -> void:
 	
 func player_in_range(pos: Vector2, radius: float) -> bool:
 	return pos.distance_to(GameState.player.position) < radius
+
+func roundm(n: float, m: int) -> float:
+	return round(n / m) * m

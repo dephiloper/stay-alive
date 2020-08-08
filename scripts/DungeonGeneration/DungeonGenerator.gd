@@ -11,6 +11,7 @@ onready var _states_map = {
 }
 
 var _state := 'RoomGeneration'
+var rooms: Array = []
 
 func _ready() -> void:
 	_change_state(_state)

@@ -2,6 +2,7 @@ class_name BaseState extends Node
 
 var root: Node
 var state_time: float
+var index: int
 
 func init(_root: Node) -> BaseState:
 	self.root = _root
@@ -9,6 +10,7 @@ func init(_root: Node) -> BaseState:
 
 func enter() -> void:
 	state_time = 0.0
+	index = 0
 	pass
 	
 func leave() -> void:
