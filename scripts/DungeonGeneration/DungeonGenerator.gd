@@ -1,5 +1,7 @@
 class_name DungeonGenerator extends Node2D
 
+const TILE_SIZE := 4
+
 onready var _states_map = {
 	'RoomGeneration': $States/RoomGeneration.init(self),
 	'RoomSeparation': $States/RoomSeparation.init(self),
@@ -11,7 +13,7 @@ onready var _states_map = {
 }
 
 var _state := 'RoomGeneration'
-var rooms: Array = []
+var rooms: Array = [Room]
 
 func _ready() -> void:
 	_change_state(_state)
