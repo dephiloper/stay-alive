@@ -1,5 +1,8 @@
 class_name RoomSeparation extends BaseState
 
+var CHUNK_SIZE := 32
+var chunk_index := 0
+var collision_appeared := false
 var _gen: DungeonGenerator
 
 func init(root: Node) -> BaseState:
@@ -11,10 +14,10 @@ func enter() -> void:
 
 func process(delta: float) -> String:
 	var state := .process(delta)
-	var collision_appeared := false
-	for i in range(len(_gen.rooms)):
+	
+	for c in range(CHUNK_SIZE):
+		var i = c + chunk_index * CHUNK_SIZE
 		var roomA := _gen.rooms[i] as Room
-		
 		roomA.is_collided = false
 		for j in range(len(_gen.rooms)):
 			if i == j: continue
@@ -25,13 +28,19 @@ func process(delta: float) -> String:
 				roomA.is_collided = true
 				roomB.is_collided = true
 				var dir := (_gen.rooms[j] as Room).position.direction_to((_gen.rooms[i] as Room).position)
-				var new_pos := (_gen.rooms[i] as Room).position + dir * 3
-				new_pos += Vector2(rand_range(-1,1), rand_range(-1,1)) * 3
+				var new_pos := (_gen.rooms[i] as Room).position + dir * 4
+				new_pos += Vector2(rand_range(-1,1), rand_range(-1,1)) * 4
 				roomA.position = Vector2(GameState.roundm(new_pos.x, _gen.TILE_SIZE), GameState.roundm(new_pos.y, _gen.TILE_SIZE))
-				break
-
-	if not collision_appeared:
-		state = "MainRoomPicking"
+	
+	chunk_index += 1
+	
+	if chunk_index * CHUNK_SIZE == len(_gen.rooms):
+		if !collision_appeared:
+			print("done")
+			state = "MainRoomPicking"
+		else:
+			collision_appeared = false
+			chunk_index = 0
 #	for (let i = 0; i < rooms.length; i++) {
 #						rooms[i].isCollided = false;
 #						for (let j = 0; j < rooms.length; j++) {

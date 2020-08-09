@@ -2,10 +2,9 @@ class_name RoomGeneration extends BaseState
 
 const room_scene := preload("res://scenes/DungeonGeneration/Room.tscn")
 
-const ROOM_SPAWN_RADIUS := 48
-const ROOM_COUNT := 64
-const ROOM_MIN_DIM := 6
-const ROOM_MAX_DIM := 64
+const ROOM_SPAWN_RADIUS := 96
+const ROOM_MIN_DIM := 8
+const ROOM_MAX_DIM := 48
 
 const STAGE_STEP_PAUSE := 0.1
 const STAGE_PAUSE := 1.0
@@ -20,7 +19,7 @@ func init(root: Node) -> BaseState:
 func enter() -> void:
 	.enter()
 	var center := Vector2(512, 288)
-	var coords: Array = _generate_positions_within_circle(center, ROOM_SPAWN_RADIUS, ROOM_COUNT)
+	var coords: Array = _generate_positions_within_circle(center, ROOM_SPAWN_RADIUS, _gen.ROOM_COUNT)
 	_gen.rooms = _generate_rooms(coords)
 
 func process(delta: float) -> String:
@@ -62,9 +61,7 @@ func _generate_rooms(points: Array) -> Array:
 	var rooms: Array = []
 	for p in points:
 		var room := room_scene.instance()
-		room.position = p
-		room.width = GameState.roundm(rand_range(ROOM_MIN_DIM, ROOM_MAX_DIM), _gen.TILE_SIZE)
-		room.height = GameState.roundm(rand_range(ROOM_MIN_DIM, ROOM_MAX_DIM), _gen.TILE_SIZE)
+		room.setup(p, GameState.roundm(rand_range(ROOM_MIN_DIM, ROOM_MAX_DIM), _gen.TILE_SIZE), GameState.roundm(rand_range(ROOM_MIN_DIM, ROOM_MAX_DIM), _gen.TILE_SIZE))
 		rooms.append(room)
 
 	return rooms
