@@ -2,15 +2,7 @@ class_name RoomGeneration extends BaseState
 
 const room_scene := preload("res://scenes/DungeonGeneration/Room.tscn")
 
-const ROOM_SPAWN_RADIUS := 96
-const ROOM_MIN_DIM := 8
-const ROOM_MAX_DIM := 48
-
-const STAGE_STEP_PAUSE := 0.1
-const STAGE_PAUSE := 1.0
-
 var _gen: DungeonGenerator
-var _state_started := false 
 
 func init(root: Node) -> BaseState:
 	_gen = root as DungeonGenerator
@@ -19,22 +11,18 @@ func init(root: Node) -> BaseState:
 func enter() -> void:
 	.enter()
 	var center := Vector2(512, 288)
-	var coords: Array = _generate_positions_within_circle(center, ROOM_SPAWN_RADIUS, _gen.ROOM_COUNT)
+	var coords: Array = _generate_positions_within_circle(center, _gen.ROOM_SPAWN_RADIUS, _gen.ROOM_COUNT)
 	_gen.rooms = _generate_rooms(coords)
 
 func process(delta: float) -> String:
 	var state := .process(delta)
 	
-	if not _state_started and state_time > STAGE_PAUSE:
-		_state_started = true
+	_gen.add_child(_gen.rooms[index])
+	index += 1
+	state_time = 0
 	
-	if _state_started:
-		if state_time > STAGE_STEP_PAUSE:
-			_gen.add_child(_gen.rooms[index])
-			index += 1
-		
-		if index == len(_gen.rooms):
-			state = "RoomSeparation"
+	if index == len(_gen.rooms):
+		state = "RoomSeparation"
 	
 	return state
 	
@@ -59,9 +47,11 @@ func _generate_positions_within_circle(center: Vector2, radius: float, n: float)
 
 func _generate_rooms(points: Array) -> Array:
 	var rooms: Array = []
-	for p in points:
+	for i in range(len(points)):
 		var room := room_scene.instance()
-		room.setup(p, GameState.roundm(rand_range(ROOM_MIN_DIM, ROOM_MAX_DIM), _gen.TILE_SIZE), GameState.roundm(rand_range(ROOM_MIN_DIM, ROOM_MAX_DIM), _gen.TILE_SIZE))
+		room.setup(i, points[i], 
+			GameState.roundm(rand_range(_gen.ROOM_MIN_DIM, _gen.ROOM_MAX_DIM), _gen.TILE_SIZE), 
+			GameState.roundm(rand_range(_gen.ROOM_MIN_DIM, _gen.ROOM_MAX_DIM), _gen.TILE_SIZE))
 		rooms.append(room)
 
 	return rooms

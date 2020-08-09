@@ -94,6 +94,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/DungeonGeneration/Room.gd"
 }, {
+"base": "Area2D",
+"class": "RoomCollider",
+"language": "GDScript",
+"path": "res://scripts/DungeonGeneration/RoomCollider.gd"
+}, {
 "base": "BaseState",
 "class": "RoomGeneration",
 "language": "GDScript",
@@ -132,6 +137,7 @@ _global_script_class_icons={
 "MovementBehaviour": "",
 "Player": "",
 "Room": "",
+"RoomCollider": "",
 "RoomGeneration": "",
 "RoomSeparation": "",
 "Slime": "",
