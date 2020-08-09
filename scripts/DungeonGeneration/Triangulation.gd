@@ -1,11 +1,10 @@
 class_name Triangulation extends BaseState
 
-const STAGE_STEP_PAUSE := 0.5
+const connection_scene := preload("res://scenes/DungeonGeneration/Connection.tscn")
+
+const STAGE_STEP_PAUSE := 0.2
 
 var _gen: DungeonGenerator
-
-var _coords: PoolVector2Array
-var _triangulation: PoolIntArray
 
 func init(root: Node) -> BaseState:
 	_gen = root as DungeonGenerator
@@ -13,34 +12,45 @@ func init(root: Node) -> BaseState:
 
 func enter() -> void:
 	.enter()
-	for r in _gen.main_rooms:
-		_coords.append((r as Room).position)
-	
-	_coords.invert()
-	_triangulation = Geometry.triangulate_delaunay_2d(_coords)
+	var triangulation = Geometry.triangulate_delaunay_2d(_gen.get_main_room_coords())
+	_gen.connections = _unique_connections(triangulation, _gen.main_rooms)
+
 func process(delta: float) -> String:
 	var state := .process(delta)
 	
-	if index == len(_triangulation):
+	if index == len(_gen.connections):
 		state = "GraphGeneration"
 	elif state_time > STAGE_STEP_PAUSE:
-		var a := _coords[_triangulation[index]] as Vector2
-		var b := _coords[_triangulation[index+1]] as Vector2
-		var c := _coords[_triangulation[index+2]] as Vector2
-		_gen.connections.append(_make_line(a, b))
-		_gen.connections.append(_make_line(b, c))
-		_gen.connections.append(_make_line(c, a))
-		index += 3
+		_gen.add_child(_gen.connections[index] as Connection)
+		index += 1
+		state_time = 0
 	
 	return state
 	
 func leave() -> void:
 	.leave()
 	
-func _make_line(a: Vector2, b: Vector2) -> Line2D:
-	var line := Line2D.new() as Line2D
-	line.width = 1.5
-	line.default_color = Color.yellow
-	line.points = [a, b]
-	_gen.add_child(line)
-	return line
+func _unique_connections(triangulation: PoolIntArray, rooms: Array) -> Array:
+	var i: int = 0
+	var unique: Array = []
+	var connections: Array = []
+	while i < len(triangulation):
+		var a := triangulation[i] as int
+		var b := triangulation[i+1] as int
+		var c := triangulation[i+2] as int
+		
+		if unique.count([a, b]) == 0 and unique.count([b, a]) == 0:
+			unique.append([a, b])
+		if unique.count([b, c]) == 0 and unique.count([c, b]) == 0:
+			unique.append([b, c])
+		if unique.count([a, c]) == 0 and unique.count([c, a]) == 0:
+			unique.append([a, c])
+		i += 3
+		
+	for u in unique:
+		var con := connection_scene.instance()
+		con.a = rooms[u[0]] as Room
+		con.b = rooms[u[1]] as Room
+		connections.append(con)
+		
+	return connections

@@ -1,4 +1,4 @@
-class_name MovementBehaviour
+extends Node
 
 const CIRCLE_DISTANCE: float = 20.0
 const CIRCLE_RADIUS: float = 50.0

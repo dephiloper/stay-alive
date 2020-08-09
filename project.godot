@@ -24,6 +24,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/Enemy/Slime/Charge.gd"
 }, {
+"base": "Node2D",
+"class": "Connection",
+"language": "GDScript",
+"path": "res://scripts/DungeonGeneration/Connection.gd"
+}, {
 "base": "BaseEnemy",
 "class": "Creep",
 "language": "GDScript",
@@ -79,11 +84,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/DungeonGeneration/MainRoomPicking.gd"
 }, {
-"base": "Reference",
-"class": "MovementBehaviour",
-"language": "GDScript",
-"path": "res://scripts/Helper/MovementBehavior.gd"
-}, {
 "base": "KinematicBody2D",
 "class": "Player",
 "language": "GDScript",
@@ -123,6 +123,7 @@ _global_script_class_icons={
 "BaseEnemy": "",
 "BaseState": "",
 "Charge": "",
+"Connection": "",
 "Creep": "",
 "CreepAttack": "",
 "DungeonGenerator": "",
@@ -134,7 +135,6 @@ _global_script_class_icons={
 "Jump": "",
 "Land": "",
 "MainRoomPicking": "",
-"MovementBehaviour": "",
 "Player": "",
 "Room": "",
 "RoomCollider": "",
@@ -152,6 +152,8 @@ config/icon="res://img/launcher.png"
 
 [autoload]
 
+Algorithms="*res://scripts/Helper/Algorithms.gd"
+MovementBehavior="*res://scripts/Helper/MovementBehavior.gd"
 GameState="*res://scripts/GameState.gd"
 
 [debug]

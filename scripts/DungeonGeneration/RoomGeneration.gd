@@ -39,8 +39,8 @@ func _generate_positions_within_circle(center: Vector2, radius: float, n: float)
 		var theta := randf() * 2 * PI
 		var x := center.x + r * cos(theta)
 		var y := center.y + r * sin(theta)
-		x = GameState.roundm(x, _gen.TILE_SIZE)
-		y = GameState.roundm(y, _gen.TILE_SIZE)
+		x = Algorithms.roundm(x, _gen.TILE_SIZE)
+		y = Algorithms.roundm(y, _gen.TILE_SIZE)
 		points.append(Vector2(x, y))
 
 	return points
@@ -50,8 +50,8 @@ func _generate_rooms(points: Array) -> Array:
 	for i in range(len(points)):
 		var room := room_scene.instance()
 		room.setup(i, points[i], 
-			GameState.roundm(rand_range(_gen.ROOM_MIN_DIM, _gen.ROOM_MAX_DIM), _gen.TILE_SIZE), 
-			GameState.roundm(rand_range(_gen.ROOM_MIN_DIM, _gen.ROOM_MAX_DIM), _gen.TILE_SIZE))
+			Algorithms.roundm(rand_range(_gen.ROOM_MIN_DIM, _gen.ROOM_MAX_DIM), _gen.TILE_SIZE), 
+			Algorithms.roundm(rand_range(_gen.ROOM_MIN_DIM, _gen.ROOM_MAX_DIM), _gen.TILE_SIZE))
 		rooms.append(room)
 
 	return rooms

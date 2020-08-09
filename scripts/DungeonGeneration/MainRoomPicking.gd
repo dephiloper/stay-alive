@@ -1,6 +1,6 @@
 class_name MainRoomPicking extends BaseState
 
-const STAGE_STEP_PAUSE := 0.5
+const STAGE_STEP_PAUSE := 0.2
 
 var _gen: DungeonGenerator
 

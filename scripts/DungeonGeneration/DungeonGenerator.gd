@@ -1,13 +1,13 @@
 class_name DungeonGenerator extends Node2D
 
 const TILE_SIZE := 4
-const ROOM_COUNT := 96
+const ROOM_COUNT := 64
 const ROOM_MIN_DIM := 8
 const ROOM_MAX_DIM := 48
 const ROOM_SPAWN_RADIUS := 96
 const MAIN_ROOM_COUNT := 12
 const MAIN_ROOM_DIST := 64
-const STATE_PAUSE := 1.5
+const STATE_PAUSE := 1.0
 
 
 onready var _states_map = {
@@ -23,6 +23,7 @@ onready var _states_map = {
 var rooms: Array = []
 var main_rooms: Array = []
 var connections: Array = []
+var lines: Array = []
 
 var _state := 'RoomGeneration'
 var _state_time := 0.0
@@ -43,3 +44,10 @@ func _change_state(new_state: String) -> void:
 	_state = new_state
 	_states_map[_state].enter()
 	_state_time = 0.0
+	
+func get_main_room_coords() -> PoolVector2Array:
+	var coords: PoolVector2Array
+	for r in main_rooms:
+		coords.append((r as Room).position)
+	
+	return coords

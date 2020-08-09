@@ -1,7 +1,5 @@
 class_name Idle extends BaseState
 
-var _movement_behavior = preload("res://scripts/Helper/MovementBehavior.gd").new()
-
 const IDLE_SPEED := 20
 const MAX_DISTANCE_TO_SPAWN := 60
 const BACK_TO_SPAWN_FORCE := 30
@@ -19,7 +17,7 @@ func enter() -> void:
 
 func process(delta: float) -> String:
 	var state := .process(delta)
-	_slime.velocity += _movement_behavior.wander(_slime.velocity)
+	_slime.velocity += MovementBehavior.wander(_slime.velocity)
 	
 	if _slime.spawn_point.distance_to(_slime.position) > MAX_DISTANCE_TO_SPAWN:
 		_slime.velocity += _slime.position.direction_to(_slime.spawn_point) * BACK_TO_SPAWN_FORCE

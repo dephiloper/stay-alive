@@ -41,7 +41,7 @@ func process(delta: float) -> String:
 				var dir := col_b.position.direction_to(col_a.position)
 				var new_pos := col_a.position + dir * 4
 				new_pos += Vector2(rand_range(-1,1), rand_range(-1,1)) * 4
-				col_a.position = Vector2(GameState.roundm(new_pos.x, _gen.TILE_SIZE), GameState.roundm(new_pos.y, _gen.TILE_SIZE))
+				col_a.position = Vector2(Algorithms.roundm(new_pos.x, _gen.TILE_SIZE), Algorithms.roundm(new_pos.y, _gen.TILE_SIZE))
 				room_a.target_position = col_a.position
 	
 	_chunk_index += 1
