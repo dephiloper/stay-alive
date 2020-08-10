@@ -4,16 +4,17 @@ var id: int
 var width: float
 var height: float
 var target_position: Vector2
+var is_positioned := false
+
+var is_main: bool setget is_main_set
+var is_intermediate: bool setget is_intermediate_set
+var is_hallway: bool setget is_hallway_set
 
 onready var color_rect := $ColorRect as ColorRect
 onready var center := $CenterPoint as Sprite
 
-var is_main_room: bool setget is_main_room_set
-var is_intermediate: bool setget is_intermediate_set
-var is_hallway: bool setget is_hallway_set
-
-func is_main_room_set(val: bool) -> void:
-		is_main_room = val
+func is_main_set(val: bool) -> void:
+		is_main = val
 		color_rect.color = Color(0, 1, 0, 0.3)
 		center.modulate = Color(0, 1, 0, 1)
 		center.visible = true
@@ -39,7 +40,9 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if target_position != Vector2.ZERO:
 		var dist = position.distance_to(target_position)
-		if dist < 1:
+		if dist < 8:
 			position = target_position
+			target_position = Vector2.ZERO
+			is_positioned = true
 		else:
-			position += position.direction_to(target_position) * delta * dist
+			position += position.direction_to(target_position) * delta * dist * 8

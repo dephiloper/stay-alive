@@ -1,7 +1,7 @@
 class_name GraphGeneration extends BaseState
 const connection_scene := preload("res://scenes/DungeonGeneration/Connection.tscn")
 
-const STAGE_STEP_PAUSE := 0.2
+const STATE_STEP_PAUSE := 0.05
 
 var _gen: DungeonGenerator
 var _unused_connections: Array
@@ -21,8 +21,11 @@ func process(delta: float) -> String:
 	
 	if index == len(_unused_connections):
 		state = "HallwayRouting"
-	elif state_time > STAGE_STEP_PAUSE:
-		(_unused_connections[index] as Connection).queue_free()
+	elif state_time > STATE_STEP_PAUSE:
+		var conn = _unused_connections[index] as Connection
+		_gen.connections.erase(conn)
+		conn.queue_free()
+		
 		index += 1
 		state_time = 0
 	
@@ -30,6 +33,7 @@ func process(delta: float) -> String:
 	
 func leave() -> void:
 	.leave()
+	
 
 func _create_used_connections(arr: PoolIntArray, rooms: Array) -> Array:
 	var used_connections: Array = []

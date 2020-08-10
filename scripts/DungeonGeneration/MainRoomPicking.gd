@@ -1,6 +1,6 @@
 class_name MainRoomPicking extends BaseState
 
-const STAGE_STEP_PAUSE := 0.2
+const STATE_STEP_PAUSE := 0.05
 
 var _gen: DungeonGenerator
 
@@ -18,8 +18,8 @@ func process(delta: float) -> String:
 	
 	if len(_gen.main_rooms) == index:
 		state = "Triangulation"
-	elif state_time > STAGE_STEP_PAUSE:
-		(_gen.main_rooms[index] as Room).is_main_room = true
+	elif state_time > STATE_STEP_PAUSE:
+		(_gen.main_rooms[index] as Room).is_main = true
 		index += 1
 		state_time = 0
 	

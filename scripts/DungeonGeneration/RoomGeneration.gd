@@ -10,15 +10,15 @@ func init(root: Node) -> BaseState:
 
 func enter() -> void:
 	.enter()
-	var center := Vector2(512, 288)
-	var coords: Array = _generate_positions_within_circle(center, _gen.ROOM_SPAWN_RADIUS, _gen.ROOM_COUNT)
+	var coords: Array = _generate_positions_within_circle(Vector2.ZERO, _gen.ROOM_SPAWN_RADIUS, _gen.ROOM_COUNT)
 	_gen.rooms = _generate_rooms(coords)
 
 func process(delta: float) -> String:
 	var state := .process(delta)
 	
-	_gen.add_child(_gen.rooms[index])
-	index += 1
+	for i in range(4):
+		_gen.add_child(_gen.rooms[index + i])
+	index += 4
 	state_time = 0
 	
 	if index == len(_gen.rooms):
@@ -50,8 +50,8 @@ func _generate_rooms(points: Array) -> Array:
 	for i in range(len(points)):
 		var room := room_scene.instance()
 		room.setup(i, points[i], 
-			Algorithms.roundm(rand_range(_gen.ROOM_MIN_DIM, _gen.ROOM_MAX_DIM), _gen.TILE_SIZE), 
-			Algorithms.roundm(rand_range(_gen.ROOM_MIN_DIM, _gen.ROOM_MAX_DIM), _gen.TILE_SIZE))
+			Algorithms.roundm(rand_range(_gen.ROOM_MIN_DIM, _gen.ROOM_MAX_DIM), _gen.TILE_SIZE*2), 
+			Algorithms.roundm(rand_range(_gen.ROOM_MIN_DIM, _gen.ROOM_MAX_DIM), _gen.TILE_SIZE*2))
 		rooms.append(room)
 
 	return rooms

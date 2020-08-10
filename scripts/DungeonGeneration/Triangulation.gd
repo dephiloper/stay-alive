@@ -2,7 +2,7 @@ class_name Triangulation extends BaseState
 
 const connection_scene := preload("res://scenes/DungeonGeneration/Connection.tscn")
 
-const STAGE_STEP_PAUSE := 0.2
+const STATE_STEP_PAUSE := 0.05
 
 var _gen: DungeonGenerator
 
@@ -20,7 +20,7 @@ func process(delta: float) -> String:
 	
 	if index == len(_gen.connections):
 		state = "GraphGeneration"
-	elif state_time > STAGE_STEP_PAUSE:
+	elif state_time > STATE_STEP_PAUSE:
 		_gen.add_child(_gen.connections[index] as Connection)
 		index += 1
 		state_time = 0

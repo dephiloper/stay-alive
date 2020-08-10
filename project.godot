@@ -147,7 +147,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Duemonic"
-run/main_scene="res://scenes/DungeonGeneration/DungeonGenerator.tscn"
+run/main_scene="res://scenes/World.tscn"
 config/icon="res://img/launcher.png"
 
 [autoload]
