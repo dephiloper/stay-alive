@@ -6,6 +6,7 @@ var _gen: DungeonGenerator
 
 func init(root: Node) -> BaseState:
 	_gen = root as DungeonGenerator
+	
 	return .init(root)
 
 func enter() -> void:
@@ -39,8 +40,8 @@ func _generate_positions_within_circle(center: Vector2, radius: float, n: float)
 		var theta := randf() * 2 * PI
 		var x := center.x + r * cos(theta)
 		var y := center.y + r * sin(theta)
-		x = Algorithms.roundm(x, _gen.TILE_SIZE)
-		y = Algorithms.roundm(y, _gen.TILE_SIZE)
+		x = Algorithms.roundm(x, _gen.TILE_SIZE * 2)
+		y = Algorithms.roundm(y, _gen.TILE_SIZE * 2)
 		points.append(Vector2(x, y))
 
 	return points
@@ -49,9 +50,12 @@ func _generate_rooms(points: Array) -> Array:
 	var rooms: Array = []
 	for i in range(len(points)):
 		var room := room_scene.instance()
-		room.setup(i, points[i], 
-			Algorithms.roundm(rand_range(_gen.ROOM_MIN_DIM, _gen.ROOM_MAX_DIM), _gen.TILE_SIZE*2), 
-			Algorithms.roundm(rand_range(_gen.ROOM_MIN_DIM, _gen.ROOM_MAX_DIM), _gen.TILE_SIZE*2))
+		var c := (_gen.ROOM_MAX_DIM - _gen.ROOM_MIN_DIM)
+		var w := _gen.ROOM_MIN_DIM + c * pow(randf(), 1.5)
+		var h := _gen.ROOM_MIN_DIM + c * pow(randf(), 1.5)
+		room.setup(points[i], 
+			Algorithms.roundm(w, _gen.TILE_SIZE*4), 
+			Algorithms.roundm(h, _gen.TILE_SIZE*4))
 		rooms.append(room)
 
 	return rooms

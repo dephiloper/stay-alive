@@ -39,15 +39,17 @@ func process(delta: float) -> String:
 			if col_a.overlaps_area(col_b):
 				_collision_appeared = true
 				var dir := col_b.position.direction_to(col_a.position)
-				var new_pos := col_a.position + dir * _gen.TILE_SIZE * 2
-				new_pos += Vector2(rand_range(-1,1), rand_range(-1,1)) * _gen.TILE_SIZE
-				col_a.position = Vector2(Algorithms.roundm(new_pos.x, _gen.TILE_SIZE), Algorithms.roundm(new_pos.y, _gen.TILE_SIZE))
+				var new_pos := col_a.position + dir * _gen.TILE_SIZE * 4
+				new_pos += Vector2(rand_range(-1,1), rand_range(-1,1)) * _gen.TILE_SIZE * 2
+				col_a.position = Vector2(Algorithms.roundm(new_pos.x, _gen.TILE_SIZE * 2), Algorithms.roundm(new_pos.y, _gen.TILE_SIZE * 2))
 				room_a.target_position = col_a.position
 	
 	_chunk_index += 1
 	
 	if _chunk_index * CHUNK_SIZE == len(_gen.rooms):
 		if !_collision_appeared and _rooms_positioned(_gen.rooms):
+			for r in _gen.rooms:
+				r.position = Vector2(int(r.position.x), int(r.position.y))
 			state = "MainRoomPicking"
 		else:
 			_collision_appeared = false

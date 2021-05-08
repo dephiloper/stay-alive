@@ -22,12 +22,12 @@ func enter() -> void:
 			b = temp
 		
 		var l1 := Line2D.new()
-		l1.width = 64
+		l1.width = _gen.TILE_SIZE
 		l1.default_color = Color.yellowgreen
 		l1.points = [a, Vector2(a.x, b.y)]
 		
 		var l2 := Line2D.new() as Line2D
-		l2.width = 64
+		l2.width = _gen.TILE_SIZE
 		l2.default_color = Color.yellowgreen
 		l2.points = [Vector2(a.x, b.y), b]
 		

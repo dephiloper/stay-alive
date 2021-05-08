@@ -50,6 +50,11 @@ _global_script_classes=[ {
 "path": "res://scripts/DungeonGeneration/GraphGeneration.gd"
 }, {
 "base": "BaseState",
+"class": "HallwayCleanup",
+"language": "GDScript",
+"path": "res://scripts/DungeonGeneration/HallwayCleanup.gd"
+}, {
+"base": "BaseState",
 "class": "HallwayGeneration",
 "language": "GDScript",
 "path": "res://scripts/DungeonGeneration/HallwayGeneration.gd"
@@ -89,7 +94,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/Player/Player.gd"
 }, {
-"base": "Node2D",
+"base": "Area2D",
 "class": "Room",
 "language": "GDScript",
 "path": "res://scripts/DungeonGeneration/Room.gd"
@@ -128,6 +133,7 @@ _global_script_class_icons={
 "CreepAttack": "",
 "DungeonGenerator": "",
 "GraphGeneration": "",
+"HallwayCleanup": "",
 "HallwayGeneration": "",
 "HallwayRouting": "",
 "HealthSystem": "",

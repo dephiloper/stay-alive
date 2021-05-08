@@ -1,6 +1,7 @@
 extends Node2D
 
 const DEFAULT_RESOLUTION: Vector2 = Vector2(1024, 576)
+var _room_id := 0
 
 var player: Player
 var obstacles: Array = []
@@ -9,7 +10,6 @@ var screen_width: float
 var screen_height: float
 var is_mobile: bool = true
 var global_ysort: YSort
-var fps_counter := Label.new()
 
 func _init():
 	randomize()
@@ -17,8 +17,6 @@ func _init():
 	#is_mobile = true
 	
 func _ready() -> void:
-	fps_counter.set_position(Vector2(100, 100))
-	add_child(fps_counter)
 	screen_width = get_viewport().get_visible_rect().size.x
 	screen_height = get_viewport().get_visible_rect().size.y
 	var zoom_x = DEFAULT_RESOLUTION.x / screen_width
@@ -26,9 +24,6 @@ func _ready() -> void:
 	var zoom = (zoom_x + zoom_y) / 2
 	if camera:
 		camera.zoom = Vector2(zoom, zoom)
-
-func _process(delta: float) -> void:
-	fps_counter.text = str(Engine.get_frames_per_second())
 
 func register_player(_player: PhysicsBody2D) -> void:
 	self.player = _player
@@ -44,3 +39,8 @@ func set_global_ysort(ysort: YSort) -> void:
 	
 func player_in_range(pos: Vector2, radius: float) -> bool:
 	return pos.distance_to(GameState.player.position) < radius
+
+func new_id() -> int:
+	var new_id := _room_id
+	_room_id += 1
+	return new_id

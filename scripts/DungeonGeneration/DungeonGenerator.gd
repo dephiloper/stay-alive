@@ -1,15 +1,16 @@
 class_name DungeonGenerator extends Node2D
 
 const TILE_SIZE := 64
-const ROOM_COUNT := 64
-const ROOM_MIN_DIM := 8 * TILE_SIZE
-const ROOM_MAX_DIM := 48 * TILE_SIZE
-const ROOM_SPAWN_RADIUS := 96 * TILE_SIZE
+const ROOM_COUNT := 96
 const MAIN_ROOM_COUNT := 12
+
+const ROOM_MIN_DIM := 4 * TILE_SIZE
+const ROOM_MAX_DIM := 32 * TILE_SIZE
+const ROOM_SPAWN_RADIUS := 96 * TILE_SIZE
 const MAIN_ROOM_DIST := 64 * TILE_SIZE
 const STATE_PAUSE := 1.0
 
-signal finished_generation(rooms)
+signal finished_generation(main_rooms, intermediate_rooms, hallways)
 
 onready var _states_map = {
 	'RoomGeneration': $States/RoomGeneration.init(self),
@@ -18,13 +19,15 @@ onready var _states_map = {
 	'Triangulation': $States/Triangulation.init(self),
 	'GraphGeneration': $States/GraphGeneration.init(self),
 	'HallwayRouting': $States/HallwayRouting.init(self),
-	'HallwayGeneration': $States/HallwayGeneration.init(self)
+	'HallwayGeneration': $States/HallwayGeneration.init(self),
 }
 
 var rooms: Array = []
 var main_rooms: Array = []
 var connections: Array = []
 var hallway_lines: Array = []
+var intermediate_rooms: Array = []
+var hallways: Array = []
 
 var _state := 'RoomGeneration'
 var _state_time := 0.0
@@ -45,12 +48,16 @@ func _process(delta: float) -> void:
 
 func _change_state(new_state: String) -> void:
 	_states_map[_state].leave()
-	_state = new_state
-	_states_map[_state].enter()
-	_state_time = 0.0
+
+	if new_state == "Done":
+		emit_signal("finished_generation", main_rooms, intermediate_rooms, hallways)
+		has_started = false
+	else:
+		_state = new_state
+		_states_map[_state].enter()
+		_state_time = 0.0
 	
-	if _state == "HallwayGeneration":
-		emit_signal("finished_generation", main_rooms)
+
 	
 func get_main_room_coords() -> PoolVector2Array:
 	var coords: PoolVector2Array

@@ -11,7 +11,7 @@ func prim(coords: Array) -> PoolIntArray:
 	unreached.remove(0)
 
 	while len(unreached) > 0:
-		var minDist := 1000000000
+		var minDist := 1000000000.0
 		for i in range(len(reached)):
 			for j in range(len(unreached)):
 				var dist := (reached[i] as Vector2).distance_squared_to(unreached[j] as Vector2)
@@ -36,3 +36,6 @@ func prim(coords: Array) -> PoolIntArray:
 	
 func roundm(n: float, m: int) -> float:
 	return round(n / m) * m
+	
+func roundv(v: Vector2, m: int) -> Vector2:
+	return Vector2(roundm(v.x, m), roundm(v.y, m))

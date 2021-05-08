@@ -34,15 +34,15 @@ height = 9.56035
 
 [sub_resource type="SpriteFrames" id=3]
 animations = [ {
-"frames": [ ExtResource( 1 ), ExtResource( 2 ), ExtResource( 8 ), ExtResource( 5 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 10 ), ExtResource( 9 ), ExtResource( 6 ), ExtResource( 7 ) ],
-"loop": true,
-"name": "idle",
-"speed": 10.0
-}, {
 "frames": [ ExtResource( 14 ), ExtResource( 16 ), ExtResource( 11 ), ExtResource( 15 ), ExtResource( 12 ), ExtResource( 13 ) ],
 "loop": false,
 "name": "attack",
 "speed": 8.0
+}, {
+"frames": [ ExtResource( 1 ), ExtResource( 2 ), ExtResource( 8 ), ExtResource( 5 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 10 ), ExtResource( 9 ), ExtResource( 6 ), ExtResource( 7 ) ],
+"loop": true,
+"name": "idle",
+"speed": 10.0
 } ]
 
 [sub_resource type="Gradient" id=4]
